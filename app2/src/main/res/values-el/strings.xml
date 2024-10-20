@@ -1,0 +1,35 @@
+<resources>
+    <string name="INSTALL">ΕΓΚΑΤΑΣΤΑΣΗ</string>
+    <string name="add_sticker">Προσθήκη Συλλογής Αυτοκόλλητων</string>
+    <string name="author_placeholder">Συγγραφέας: %s</string>
+    <string name="author_unknown">Άγνωστος</string>
+    <string name="author_add">Συγγραφέας</string>
+    <string name="categories">Κατηγορίες</string>
+    <string name="category_add">Κατηγορία</string>
+    <string name="install_stickers">ΕΓΚΑΤΑΣΤΑΣΗ ΑΥΤΟΚΟΛΛΗΤΩΝ</string>
+    <string name="latest_stickers">Τελευταία Αυτοκόλλητα</string>
+    <string name="link_add">Σύνδεσμος</string>
+    <string name="loading_stickers">Φόρτωση Αυτοκόλλητων. Παρακαλώ περιμένετε…</string>
+    <string name="s1">Αποθήκευση εικόνας</string>
+    <string name="s2">Να επιτραπεί στη διαφήμιση να αποθηκεύσει την εικόνα στη συλλογή εικόνων;</string>
+    <string name="s3">Αποδοχή</string>
+    <string name="s4">Απόρριψη</string>
+    <string name="s5">Δημιουργία εκδήλωσης στο ημερολόγιο</string>
+    <string name="s6">Να επιτραπεί στη διαφήμιση να δημιουργήσει εκδήλωση στο ημερολόγιο;</string>
+    <string name="report_message">Είστε σίγουροι ότι θέλετε να αναφέρετε αυτήν τη συλλογή αυτοκόλλητων;</string>
+    <string name="report_stickers">Αναφορά</string>
+    <string name="report_title">Αναφορά Συλλογής Αυτοκόλλητων</string>
+    <string name="submit_add">Υποβολή</string>
+    <string name="report_submitted">Η αναφορά έχει υποβληθεί</string>
+    <string name="telegramnotfound_message">Πρέπει να εγκαταστήσετε την επίσημη εφαρμογή Telegram πριν εγκαταστήσετε αυτήν τη συλλογή αυτοκόλλητων</string>
+    <string name="telegramnotfound_title">Το Telegram δεν βρέθηκε!</string>
+    <string name="this_application">Αυτή η εφαρμογή</string>
+    <string name="title_activity_settings">Ρυθμίσεις</string>
+    <string name="title_add">Τίτλος</string>
+    <string name="no_internet">Αδυναμία σύνδεσης στο Internet. Ενεργοποιήθηκε η λειτουργία εκτός σύνδεσης.</string>
+    <string name="sticker_sending">Αποστολή αυτοκόλλητων…</string>
+    <string name="sticker_sent">Η συλλογή αυτοκόλλητων έχει σταλεί.</string>
+    <string name="sticker_name">Όνομα αυτοκόλλητου</string>
+    <string name="dictionary_all">Όλα τα αυτοκόλλητα</string>
+    <string name="splash_loading">Φόρτωση…</string>
+</resources>

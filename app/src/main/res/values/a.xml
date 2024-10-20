@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+<!--    com.walhalla.telegramstickers-->
+
+    <string name="app_id" translatable="false">ca-app-pub-5111357348858303~6487411320</string>
+    <string name="b1" translatable="false">ca-app-pub-5111357348858303/8521725567</string>
+<!--    <string name="i1" translatable="false">@</string>-->
+    <string name="r1" translatable="false">ca-app-pub-5111357348858303/4021004082</string>
+    <string name="url_privacy_policy" translatable="false">https://tgstickers-dbce8.web.app/privacy_policy.html</string>
+    <string name="rewardedId" translatable="false">ca-app-pub-5111357348858303/4626873931</string>
+
+</resources>

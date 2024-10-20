@@ -1,0 +1,36 @@
+<resources>
+    <string name="INSTALL">安裝</string>
+    <string name="add_sticker">新增貼圖套件</string>
+    <string name="author_placeholder">作者：%s</string>
+    <string name="author_unknown">未知</string>
+    <string name="author_add">作者</string>
+    <string name="categories">分類</string>
+    <string name="category_add">分類</string>
+    <string name="install_stickers">安裝貼圖</string>
+    <string name="latest_stickers">最新貼圖</string>
+    <string name="link_add">連結</string>
+    <string name="loading_stickers">正在載入貼圖，請稍候…</string>
+    <string name="s1">儲存圖片</string>
+    <string name="s2">允許廣告將圖片儲存至相簿？</string>
+    <string name="s3">接受</string>
+    <string name="s4">拒絕</string>
+    <string name="s5">建立行事曆活動</string>
+    <string name="s6">允許廣告建立行事曆活動？</string>
+    <string name="report_message">您確定要舉報此貼圖套件嗎？</string>
+    <string name="report_stickers">舉報</string>
+    <string name="report_title">舉報貼圖套件</string>
+    <string name="submit_add">提交</string>
+    <string name="report_submitted">已提交舉報</string>
+    <string name="telegramnotfound_message">在安裝此貼圖套件之前，您需要安裝官方的Telegram應用程式</string>
+    <string name="telegramnotfound_title">找不到Telegram！</string>
+    <string name="this_application">本應用程式</string>
+    <string name="title_activity_settings">設定活動</string>
+    <string name="title_add">標題</string>
+    <string name="no_internet">無法連接至網際網路。已啟動離線模式。</string>
+    <string name="sticker_sending">正在傳送貼圖…</string>
+    <string name="sticker_sent">貼圖套件已傳送。</string>
+    <string name="sticker_name">貼圖名稱</string>
+    <string name="dictionary_all">所有貼圖</string>
+    <string name="splash_loading">載入中…</string>
+
+</resources>

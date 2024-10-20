@@ -1,0 +1,36 @@
+<resources>
+    <string name="INSTALL">INSTALLER</string>
+    <string name="add_sticker">Ajouter un ensemble de stickers</string>
+    <string name="author_placeholder">Auteur : %s</string>
+    <string name="author_unknown">Inconnu</string>
+    <string name="author_add">Auteur</string>
+    <string name="categories">Catégories</string>
+    <string name="category_add">Catégorie</string>
+    <string name="install_stickers">INSTALLER DES STICKERS</string>
+    <string name="latest_stickers">Derniers stickers</string>
+    <string name="link_add">Lien</string>
+    <string name="loading_stickers">Chargement des stickers. Veuillez patienter…</string>
+    <string name="s1">Enregistrer l\'image</string>
+    <string name="s2">Autoriser la publicité à enregistrer l\'image dans la galerie de photos ?</string>
+    <string name="s3">Accepter</string>
+    <string name="s4">Refuser</string>
+    <string name="s5">Créer un événement de calendrier</string>
+    <string name="s6">Autoriser la publicité à créer un événement de calendrier ?</string>
+    <string name="report_message">Êtes-vous sûr de vouloir signaler cet ensemble de stickers ?</string>
+    <string name="report_stickers">Signaler</string>
+    <string name="report_title">Signaler l\'ensemble de stickers</string>
+    <string name="submit_add">Soumettre</string>
+    <string name="report_submitted">Rapport soumis</string>
+    <string name="telegramnotfound_message">Vous devez installer l\'application Telegram officielle avant d\'installer cet ensemble de stickers</string>
+    <string name="telegramnotfound_title">Telegram introuvable !</string>
+    <string name="this_application">Cette application</string>
+    <string name="title_activity_settings">Activité de paramètres</string>
+    <string name="title_add">Titre</string>
+    <string name="no_internet">Impossible de se connecter à Internet. Mode hors ligne activé.</string>
+    <string name="sticker_sending">Envoi des stickers…</string>
+    <string name="sticker_sent">L\'ensemble de stickers a été envoyé.</string>
+    <string name="sticker_name">Nom du sticker</string>
+    <string name="dictionary_all">Tous les stickers</string>
+    <string name="splash_loading">Chargement…</string>
+
+</resources>

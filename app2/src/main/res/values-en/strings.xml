@@ -1,0 +1,36 @@
+<resources>
+    <string name="INSTALL">INSTALL</string>
+    <string name="add_sticker">Add Stickers Set</string>
+    <string name="author_placeholder">Author: %s</string>
+    <string name="author_unknown">Unknown</string>
+    <string name="author_add">Author</string>
+    <string name="categories">Categories</string>
+    <string name="category_add">Category</string>
+    <string name="install_stickers">INSTALL STICKERS</string>
+    <string name="latest_stickers">Latest Stickers</string>
+    <string name="link_add">Link</string>
+    <string name="loading_stickers">Loading Stickers. Please wait…</string>
+    <string name="s1">Save image</string>
+    <string name="s2">Allow Ad to store image in Picture gallery?</string>
+    <string name="s3">Accept</string>
+    <string name="s4">Decline</string>
+    <string name="s5">Create calendar event</string>
+    <string name="s6">Allow Ad to create a calendar event?</string>
+    <string name="report_message">Are you sure you want to report this Sticker Pack?</string>
+    <string name="report_stickers">Report</string>
+    <string name="report_title">Report Sticker Pack</string>
+    <string name="submit_add">Submit</string>
+    <string name="report_submitted">Report Submitted</string>
+    <string name="telegramnotfound_message">You need to install the official Telegram app before install this Sticker Pack</string>
+    <string name="telegramnotfound_title">Telegram not found!</string>
+    <string name="this_application">This application</string>
+    <string name="title_activity_settings">SettingsActivity</string>
+    <string name="title_add">Title</string>
+    <string name="no_internet">Unable to connect to Internet. Offline mode activated.</string>
+    <string name="sticker_sending">Sending Stickers…</string>
+    <string name="sticker_sent">Stickers Set has been sent.</string>
+    <string name="sticker_name">Sticker Name</string>
+    <string name="dictionary_all">All Stickers</string>
+    <string name="splash_loading">Loading…</string>
+
+</resources>

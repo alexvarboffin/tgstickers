@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources xmlns:tools="http://schemas.android.com/tools" tools:ignore="MissingTranslation">
+
+    <string name="c_animals">Animals</string>
+    <string name="c_art_and_design">Art &amp; Design</string>
+    <string name="c_auto_and_moto">Auto &amp; Moto</string>
+    <string name="c_books_and_magazine">Books &amp; Magazine</string>
+    <string name="c_celebrities">Celebrities</string>
+    <string name="c_cryptocurrencies">Cryptocurrencies</string>
+    <string name="c_economics_and_finance">Economics &amp; Finance</string>
+    <string name="c_entertainment">Entertainment</string>
+    <string name="c_fashion_and_beauty">Fashion &amp; Beauty</string>
+    <string name="c_food">Food</string>
+    <string name="c_games_and_apps">Games &amp; Apps</string>
+    <string name="c_health">Health</string>
+    <string name="c_languages">Languages</string>
+    <string name="c_love">Love</string>
+    <string name="c_news_and_media">News &amp; Media</string>
+
+    <string name="c_photo">Photo</string>
+    <string name="c_science">Science</string>
+    <string name="c_self_development">Self Development</string>
+    <string name="c_sports_and_fitness">Sports &amp; Fitness</string>
+    <string name="c_technology">Technology</string>
+    <string name="c_telegram">Telegram</string>
+    <string name="c_travel">Travel</string>
+    <string name="c_videos_and_movies">Videos &amp; Movies</string>
+    <string name="c_other">Other</string>
+
+
+</resources>

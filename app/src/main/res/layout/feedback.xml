@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="fill_parent"
+    android:orientation="horizontal">
+
+<!--    <Button-->
+<!--        android:id="@+id/feedback_bug"-->
+<!--        style="@style/Widget.AppCompat.Button.Colored"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@color/colorAccent"-->
+<!--        android:text="@string/feedback_bug" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/feedback_idea"-->
+<!--        style="@style/Widget.AppCompat.Button.Colored"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@color/colorAccent"-->
+<!--        android:text="@string/feedback_idea" />-->
+
+<!--    <Button-->
+<!--        android:id="@+id/feedback_question"-->
+<!--        style="@style/Widget.AppCompat.Button.Colored"-->
+<!--        android:layout_width="wrap_content"-->
+<!--        android:layout_height="wrap_content"-->
+<!--        android:background="@color/colorAccent"-->
+<!--        android:text="@string/feedback_question" />-->
+</LinearLayout>

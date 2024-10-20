@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+    <color name="colorControlNormal">#000000</color>
+    <color name="background">#250931</color>
+
+    <color name="colorAccent">#FD5068</color>
+    <color name="colorPrimary">#FD297C</color>
+    <color name="colorPrimaryDark">#FD297C</color>
+    <color name="toolbarStartColor">#FD2C7A</color>
+    <color name="toolbarEndColor">#FF7755</color>
+
+    <color name="error">#F80A38</color>
+</resources>

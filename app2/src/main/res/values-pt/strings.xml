@@ -1,0 +1,36 @@
+<resources>
+    <string name="INSTALL">INSTALAR</string>
+    <string name="add_sticker">Adicionar Conjunto de Autocolantes</string>
+    <string name="author_placeholder">Autor: %s</string>
+    <string name="author_unknown">Desconhecido</string>
+    <string name="author_add">Autor</string>
+    <string name="categories">Categorias</string>
+    <string name="category_add">Categoria</string>
+    <string name="install_stickers">INSTALAR AUTOCOLANTES</string>
+    <string name="latest_stickers">Últimos Autocolantes</string>
+    <string name="link_add">Link</string>
+    <string name="loading_stickers">A Carregar Autocolantes. Por favor aguarde…</string>
+    <string name="s1">Guardar imagem</string>
+    <string name="s2">Permitir que o Anúncio guarde a imagem na galeria de fotos?</string>
+    <string name="s3">Aceitar</string>
+    <string name="s4">Recusar</string>
+    <string name="s5">Criar evento no calendário</string>
+    <string name="s6">Permitir que o Anúncio crie um evento no calendário?</string>
+    <string name="report_message">Tem a certeza de que deseja denunciar este Pacote de Autocolantes?</string>
+    <string name="report_stickers">Denunciar</string>
+    <string name="report_title">Denunciar Pacote de Autocolantes</string>
+    <string name="submit_add">Submeter</string>
+    <string name="report_submitted">Denúncia enviada</string>
+    <string name="telegramnotfound_message">Precisa de instalar a aplicação oficial do Telegram antes de instalar este Pacote de Autocolantes</string>
+    <string name="telegramnotfound_title">Telegram não encontrado!</string>
+    <string name="this_application">Esta aplicação</string>
+    <string name="title_activity_settings">Atividade de Configurações</string>
+    <string name="title_add">Título</string>
+    <string name="no_internet">Não é possível conectar à Internet. Modo offline ativado.</string>
+    <string name="sticker_sending">A Enviar Autocolantes…</string>
+    <string name="sticker_sent">Conjunto de Autocolantes enviado.</string>
+    <string name="sticker_name">Nome do Autocolante</string>
+    <string name="dictionary_all">Todos os Autocolantes</string>
+    <string name="splash_loading">A Carregar…</string>
+
+</resources>

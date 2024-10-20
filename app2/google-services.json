@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "101947685186",
+    "project_id": "tgstickerscatalogue",
+    "storage_bucket": "tgstickerscatalogue.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:101947685186:android:c6bc7a5a8f5c29f73570db",
+        "android_client_info": {
+          "package_name": "com.telegramstickers.catalogue"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDOXnWtI_WHkbQWTDbTjclSlBUTLli_LQo"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

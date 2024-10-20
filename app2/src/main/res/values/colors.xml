@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+<!--    <color name="colorPrimary">#26234B</color>-->
+<!--    <color name="colorPrimaryDark">#26234B</color>-->
+<!--    <color name="toolbarStartColor">#5B0A6B</color>-->
+<!--    <color name="toolbarEndColor">#26234B</color>-->
+
+    <color name="colorPrimary">#003FC1</color>
+    <color name="colorPrimaryDark">#003FC1</color>
+    <color name="toolbarStartColor">#003FC1</color>
+    <color name="toolbarEndColor">#054ADA</color>
+
+
+    <color name="colorControlNormal">#000000</color>
+    <color name="background">#250931</color>
+
+    <color name="colorAccent">#FD5068</color>
+
+
+
+    <color name="error">#F80A38</color>
+</resources>

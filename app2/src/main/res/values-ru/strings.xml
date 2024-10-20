@@ -1,0 +1,38 @@
+<resources>
+    <string name="INSTALL">УСТАНОВИТЬ</string>
+    <string name="add_sticker">Добавить набор стикеров</string>
+    <string name="author_placeholder">Автор: %s</string>
+    <string name="author_unknown">Неизвестный</string>
+    <string name="author_add">Автор</string>
+    <string name="categories">Категории</string>
+    <string name="category_add">Категория</string>
+    <string name="install_stickers">УСТАНОВИТЬ СТИКЕРЫ</string>
+    <string name="latest_stickers">Последние стикеры</string>
+    <string name="link_add">Ссылка</string>
+    <string name="loading_stickers">Загрузка стикеров. Пожалуйста, подождите…</string>
+    <string name="s1">Сохранить изображение</string>
+    <string name="s2">Разрешить рекламе сохранить изображение в галерее?</string>
+    <string name="s3">Принять</string>
+    <string name="s4">Отклонить</string>
+    <string name="s5">Создать событие в календаре</string>
+    <string name="s6">Разрешить рекламе создать событие в календаре?</string>
+    <string name="report_message">Вы уверены, что хотите сообщить о данном наборе стикеров?</string>
+    <string name="report_stickers">Сообщить</string>
+    <string name="report_title">Сообщить о наборе стикеров</string>
+    <string name="submit_add">Отправить</string>
+    <string name="report_submitted">Отчет отправлен</string>
+    <string name="telegramnotfound_message">Перед установкой данного набора стикеров вам необходимо установить официальное приложение Telegram</string>
+    <string name="telegramnotfound_title">Telegram не найден!</string>
+    <string name="this_application">Это приложение</string>
+    <string name="title_activity_settings">Настройки</string>
+    <string name="title_add">Заголовок</string>
+    <string name="no_internet">Невозможно подключиться к Интернету. Включен режим офлайн.</string>
+    <string name="sticker_sending">Отправка стикеров…</string>
+    <string name="sticker_sent">Набор стикеров отправлен.</string>
+    <string name="sticker_name">Имя стикера</string>
+    <string name="dictionary_all">Все стикеры</string>
+    <string name="splash_loading">Загрузка…</string>
+
+    <string name="action_share_image">Поделиться картинкой</string>
+
+</resources>

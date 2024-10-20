@@ -1,0 +1,36 @@
+<resources>
+    <string name="INSTALL">INSTALLIEREN</string>
+    <string name="add_sticker">Stickersammlung hinzufügen</string>
+    <string name="author_placeholder">Autor: %s</string>
+    <string name="author_unknown">Unbekannt</string>
+    <string name="author_add">Autor</string>
+    <string name="categories">Kategorien</string>
+    <string name="category_add">Kategorie</string>
+    <string name="install_stickers">STICKER INSTALLIEREN</string>
+    <string name="latest_stickers">Neueste Aufkleber</string>
+    <string name="link_add">Link</string>
+    <string name="loading_stickers">Aufkleber werden geladen. Bitte warten…</string>
+    <string name="s1">Bild speichern</string>
+    <string name="s2">Erlauben Sie der Werbung, das Bild in der Bildergalerie zu speichern?</string>
+    <string name="s3">Akzeptieren</string>
+    <string name="s4">Ablehnen</string>
+    <string name="s5">Kalenderereignis erstellen</string>
+    <string name="s6">Erlauben Sie der Werbung, ein Kalenderereignis zu erstellen?</string>
+    <string name="report_message">Sind Sie sicher, dass Sie diese Stickersammlung melden möchten?</string>
+    <string name="report_stickers">Melden</string>
+    <string name="report_title">Stickersammlung melden</string>
+    <string name="submit_add">Senden</string>
+    <string name="report_submitted">Meldung abgeschickt</string>
+    <string name="telegramnotfound_message">Sie müssen die offizielle Telegram-App installieren, bevor Sie diese Stickersammlung installieren können.</string>
+    <string name="telegramnotfound_title">Telegram nicht gefunden!</string>
+    <string name="this_application">Diese Anwendung</string>
+    <string name="title_activity_settings">Einstellungen</string>
+    <string name="title_add">Titel</string>
+    <string name="no_internet">Keine Verbindung zum Internet möglich. Offline-Modus aktiviert.</string>
+    <string name="sticker_sending">Aufkleber werden gesendet…</string>
+    <string name="sticker_sent">Stickersammlung wurde gesendet.</string>
+    <string name="sticker_name">Stickername</string>
+    <string name="dictionary_all">Alle Aufkleber</string>
+    <string name="splash_loading">Laden…</string>
+
+</resources>

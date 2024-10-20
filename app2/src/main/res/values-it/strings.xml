@@ -1,0 +1,36 @@
+<resources>
+    <string name="INSTALL">INSTALLA</string>
+    <string name="add_sticker">Aggiungi set di adesivi</string>
+    <string name="author_placeholder">Autore: %s</string>
+    <string name="author_unknown">Sconosciuto</string>
+    <string name="author_add">Autore</string>
+    <string name="categories">Categorie</string>
+    <string name="category_add">Categoria</string>
+    <string name="install_stickers">INSTALLA ADESIVI</string>
+    <string name="latest_stickers">Ultimi adesivi</string>
+    <string name="link_add">Link</string>
+    <string name="loading_stickers">Caricamento adesivi. Attendere…</string>
+    <string name="s1">Salva immagine</string>
+    <string name="s2">Permettere alla pubblicità di salvare l\'immagine nella galleria delle immagini?</string>
+    <string name="s3">Accetta</string>
+    <string name="s4">Rifiuta</string>
+    <string name="s5">Crea evento del calendario</string>
+    <string name="s6">Permettere alla pubblicità di creare un evento del calendario?</string>
+    <string name="report_message">Sei sicuro di voler segnalare questo set di adesivi?</string>
+    <string name="report_stickers">Segnala</string>
+    <string name="report_title">Segnala set di adesivi</string>
+    <string name="submit_add">Invia</string>
+    <string name="report_submitted">Segnalazione inviata</string>
+    <string name="telegramnotfound_message">Devi installare l\'app ufficiale di Telegram prima di installare questo set di adesivi</string>
+    <string name="telegramnotfound_title">Telegram non trovato!</string>
+    <string name="this_application">Questa applicazione</string>
+    <string name="title_activity_settings">Attività Impostazioni</string>
+    <string name="title_add">Titolo</string>
+    <string name="no_internet">Impossibile connettersi a Internet. Modalità offline attivata.</string>
+    <string name="sticker_sending">Invio adesivi…</string>
+    <string name="sticker_sent">Il set di adesivi è stato inviato.</string>
+    <string name="sticker_name">Nome adesivo</string>
+    <string name="dictionary_all">Tutti gli adesivi</string>
+    <string name="splash_loading">Caricamento…</string>
+
+</resources>

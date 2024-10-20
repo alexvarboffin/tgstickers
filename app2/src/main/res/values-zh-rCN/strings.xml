@@ -1,0 +1,36 @@
+<resources>
+    <string name="INSTALL">安装</string>
+    <string name="add_sticker">添加贴纸套装</string>
+    <string name="author_placeholder">作者: %s</string>
+    <string name="author_unknown">未知</string>
+    <string name="author_add">作者</string>
+    <string name="categories">分类</string>
+    <string name="category_add">分类</string>
+    <string name="install_stickers">安装贴纸</string>
+    <string name="latest_stickers">最新贴纸</string>
+    <string name="link_add">链接</string>
+    <string name="loading_stickers">正在加载贴纸。请等待…</string>
+    <string name="s1">保存图片</string>
+    <string name="s2">允许广告将图片保存到图片库中？</string>
+    <string name="s3">接受</string>
+    <string name="s4">拒绝</string>
+    <string name="s5">创建日历事件</string>
+    <string name="s6">允许广告创建日历事件？</string>
+    <string name="report_message">您确定要举报此贴纸包吗？</string>
+    <string name="report_stickers">举报</string>
+    <string name="report_title">举报贴纸包</string>
+    <string name="submit_add">提交</string>
+    <string name="report_submitted">已提交举报</string>
+    <string name="telegramnotfound_message">在安装此贴纸包之前，您需要安装官方的Telegram应用</string>
+    <string name="telegramnotfound_title">未找到Telegram！</string>
+    <string name="this_application">此应用</string>
+    <string name="title_activity_settings">设置活动</string>
+    <string name="title_add">标题</string>
+    <string name="no_internet">无法连接到互联网。已激活离线模式。</string>
+    <string name="sticker_sending">正在发送贴纸…</string>
+    <string name="sticker_sent">贴纸套装已发送。</string>
+    <string name="sticker_name">贴纸名称</string>
+    <string name="dictionary_all">所有贴纸</string>
+    <string name="splash_loading">加载中…</string>
+
+</resources>

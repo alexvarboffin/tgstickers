@@ -1,0 +1,98 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content"
+    android:minWidth="300.0dip"
+    android:orientation="vertical"
+    android:padding="20.0dip"
+    android:paddingLeft="20.0dip">
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/title_add"
+        android:textColor="#80000000"
+        android:textSize="20.0dip" />
+
+    <EditText
+        android:id="@+id/inputTitle"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:singleLine="true"
+        android:textColor="#ff000000"
+        android:textSize="18.0dip" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/author_add"
+        android:textColor="#80000000"
+        android:textSize="20.0dip" />
+
+    <EditText
+        android:id="@+id/inputAuthor"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:inputType="text"
+        android:singleLine="true"
+        android:textColor="#ff000000"
+        android:textSize="18.0dip" />
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5.0dip"
+        android:text="@string/link_add"
+        android:textColor="#80000000"
+        android:textSize="20.0dip" />
+
+    <LinearLayout
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal">
+
+        <TextView
+            android:id="@+id/textView"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_gravity="center_vertical"
+
+            android:textColor="#ff000000"
+            android:textSize="16.0dip" />
+
+        <EditText
+            android:id="@+id/inputLink"
+            android:layout_width="fill_parent"
+            android:layout_height="wrap_content"
+            android:inputType="text"
+            android:password="false"
+            android:singleLine="true"
+            android:textColor="#ff000000"
+            android:textSize="18.0dip" />
+    </LinearLayout>
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="5.0dip"
+        android:text="@string/category_add"
+        android:textColor="#80000000"
+        android:textSize="20.0dip" />
+
+    <Spinner
+        android:id="@+id/inputCategory"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:entries="@array/spinnerCategories"
+        android:textSize="18.0dip" />
+
+    <Button
+        android:id="@+id/btnAddSticker"
+        style="@style/Widget.AppCompat.Button.Colored"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="right"
+        android:background="#ff1e88e5"
+        android:text="@string/submit_add" />
+</LinearLayout>

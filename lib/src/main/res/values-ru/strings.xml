@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+
+
+    <string name="add_to_favorite_stickers">Добавить в избранное</string>
+    <string name="remove_from_favorites">Удалить из избранного</string>
+    <string name="add_it_to_favorites_question">Хотите добавить в избранные?</string>
+    <string name="remove_from_favorites_question">Удалить из избранного</string>
+    <string name="share_qr_code">Отсканируйте QRcode</string>
+    <string name="emptyFavoriteList">Список избранных стикеров пуст</string>
+
+</resources>

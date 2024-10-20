@@ -1,0 +1,35 @@
+<resources>
+    <string name="INSTALL">تثبيت</string>
+    <string name="add_sticker">إضافة مجموعة ملصقات</string>
+    <string name="author_placeholder">المؤلف: %s</string>
+    <string name="author_unknown">غير معروف</string>
+    <string name="author_add">المؤلف</string>
+    <string name="categories">الفئات</string>
+    <string name="category_add">فئة</string>
+    <string name="install_stickers">تثبيت الملصقات</string>
+    <string name="latest_stickers">أحدث الملصقات</string>
+    <string name="link_add">رابط</string>
+    <string name="loading_stickers">جاري التحميل. يرجى الانتظار…</string>
+    <string name="s1">حفظ الصورة</string>
+    <string name="s2">السماح للإعلان بحفظ الصورة في معرض الصور؟</string>
+    <string name="s3">موافق</string>
+    <string name="s4">رفض</string>
+    <string name="s5">إنشاء حدث في التقويم</string>
+    <string name="s6">السماح للإعلان بإنشاء حدث في التقويم؟</string>
+    <string name="report_message">هل أنت متأكد أنك تريد الإبلاغ عن هذه المجموعة من الملصقات؟</string>
+    <string name="report_stickers">الإبلاغ</string>
+    <string name="report_title">الإبلاغ عن مجموعة الملصقات</string>
+    <string name="submit_add">إرسال</string>
+    <string name="report_submitted">تم إرسال الإبلاغ</string>
+    <string name="telegramnotfound_message">يجب عليك تثبيت تطبيق تليجرام الرسمي قبل تثبيت هذه المجموعة من الملصقات</string>
+    <string name="telegramnotfound_title">تليجرام غير موجود!</string>
+    <string name="this_application">هذا التطبيق</string>
+    <string name="title_activity_settings">إعدادات التطبيق</string>
+    <string name="title_add">العنوان</string>
+    <string name="no_internet">تعذر الاتصال بالإنترنت. تم تفعيل وضع عدم الاتصال بالإنترنت.</string>
+    <string name="sticker_sending">جاري إرسال الملصقات…</string>
+    <string name="sticker_sent">تم إرسال مجموعة الملصقات.</string>
+    <string name="sticker_name">اسم الملصق</string>
+    <string name="dictionary_all">جميع الملصقات</string>
+    <string name="splash_loading">جاري التحميل…</string>
+</resources>

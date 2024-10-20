@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="error">#F80A38</color>
+
+    <color name="theme_color">#FFC107</color> <!-- Theme color -->
+    <color name="funThemeColor">#FFEB3B</color> <!-- Fun theme color -->
+    <color name="funThemeButtonTextColor">#000000</color> <!-- Fun theme button text color -->
+    <color name="funThemeTextColorHeader">#000000</color> <!-- Fun theme header text color -->
+    <color name="funThemeTextColorContent">#000000</color>
+    <color name="white">#FFFFFF</color> <!-- Fun theme content text color -->
+
+
+    <color name="bgMain">#ffffff</color>
+    <color name="black">#000000</color>
+    <color name="bg_gray">#202021</color>
+    <color name="bg_black">#000000</color>
+    <color name="bg_purpal">#7456FA</color>
+</resources>

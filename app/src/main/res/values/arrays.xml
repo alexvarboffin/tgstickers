@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="spinnerCategories">
+        <item>Animals</item>
+        <item>Cartoon</item>
+        <item>Faces</item>
+        <item>Movies/TV Shows</item>
+        <item>Games</item>
+        <item>Memes</item>
+        <item>Messages</item>
+        <item>Others</item>
+    </string-array>
+    <string-array name="categories_array">jjj</string-array>
+</resources>

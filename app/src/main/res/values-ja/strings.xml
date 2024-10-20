@@ -1,0 +1,36 @@
+<resources>
+    <string name="INSTALL">インストール</string>
+    <string name="add_sticker">ステッカーセットを追加</string>
+    <string name="author_placeholder">著者: %s</string>
+    <string name="author_unknown">不明</string>
+    <string name="author_add">著者</string>
+    <string name="categories">カテゴリ</string>
+    <string name="category_add">カテゴリ</string>
+    <string name="install_stickers">ステッカーをインストール</string>
+    <string name="latest_stickers">最新のステッカー</string>
+    <string name="link_add">リンク</string>
+    <string name="loading_stickers">ステッカーを読み込んでいます。お待ちください…</string>
+    <string name="s1">画像を保存</string>
+    <string name="s2">広告が画像を写真ギャラリーに保存するのを許可しますか？</string>
+    <string name="s3">承諾</string>
+    <string name="s4">辞退</string>
+    <string name="s5">カレンダーイベントを作成</string>
+    <string name="s6">広告がカレンダーイベントを作成するのを許可しますか？</string>
+    <string name="report_message">このステッカーパックを報告しますか？</string>
+    <string name="report_stickers">報告</string>
+    <string name="report_title">ステッカーパックを報告</string>
+    <string name="submit_add">提出</string>
+    <string name="report_submitted">報告が送信されました</string>
+    <string name="telegramnotfound_message">このステッカーパックをインストールする前に、公式のTelegramアプリをインストールする必要があります</string>
+    <string name="telegramnotfound_title">Telegramが見つかりません！</string>
+    <string name="this_application">このアプリケーション</string>
+    <string name="title_activity_settings">設定アクティビティ</string>
+    <string name="title_add">タイトル</string>
+    <string name="no_internet">インターネットに接続できません。オフラインモードがアクティブ化されました。</string>
+    <string name="sticker_sending">ステッカーを送信中…</string>
+    <string name="sticker_sent">ステッカーセットが送信されました。</string>
+    <string name="sticker_name">ステッカー名</string>
+    <string name="dictionary_all">すべてのステッカー</string>
+    <string name="splash_loading">読み込み中…</string>
+
+</resources>

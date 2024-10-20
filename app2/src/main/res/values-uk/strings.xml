@@ -1,0 +1,37 @@
+<resources>
+    <string name="INSTALL">ВСТАНОВИТИ</string>
+    <string name="add_sticker">Додати набір стікерів</string>
+    <string name="author_placeholder">Автор: %s</string>
+    <string name="author_unknown">Невідомий</string>
+    <string name="author_add">Автор</string>
+    <string name="categories">Категорії</string>
+    <string name="category_add">Категорія</string>
+    <string name="install_stickers">ВСТАНОВИТИ СТІКЕРИ</string>
+    <string name="latest_stickers">Останні стікери</string>
+    <string name="link_add">Посилання</string>
+    <string name="loading_stickers">Завантаження стікерів. Будь ласка, зачекайте…</string>
+    <string name="s1">Зберегти зображення</string>
+    <string name="s2">Дозволити рекламі зберігати зображення в галереї?</string>
+    <string name="s3">Прийняти</string>
+    <string name="s4">Відхилити</string>
+    <string name="s5">Створити подію в календарі</string>
+    <string name="s6">Дозволити рекламі створювати подію в календарі?</string>
+    <string name="report_message">Ви впевнені, що хочете подати скаргу на цей набір стікерів?</string>
+    <string name="report_stickers">Подати скаргу</string>
+    <string name="report_title">Подати скаргу на набір стікерів</string>
+    <string name="submit_add">Відправити</string>
+    <string name="report_submitted">Скарга відправлена</string>
+    <string name="telegramnotfound_message">Перш ніж встановлювати цей набір стікерів, вам потрібно встановити офіційний додаток Telegram</string>
+    <string name="telegramnotfound_title">Telegram не знайдено!</string>
+    <string name="this_application">Цей додаток</string>
+    <string name="title_activity_settings">Налаштування</string>
+    <string name="title_add">Заголовок</string>
+    <string name="no_internet">Неможливо підключитися до Інтернету. Ввімкнений режим офлайн.</string>
+    <string name="sticker_sending">Відправка стікерів…</string>
+    <string name="sticker_sent">Набір стікерів був відправлений.</string>
+    <string name="sticker_name">Назва стікера</string>
+    <string name="dictionary_all">Всі стікери</string>
+    <string name="splash_loading">Завантаження…</string>
+
+
+</resources>

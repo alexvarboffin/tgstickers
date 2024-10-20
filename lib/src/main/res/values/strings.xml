@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="alert_perm_title">Permission required</string>
+    <string name="format_request_permision">%1$s will need to have read/write permission your sdcard to save Files.Do you want to grant it?</string>
+    <string name="app_name">0</string>
+
+
+    <string name="telegramnotfound_message">You need to install the official Telegram app before install this Sticker Pack</string>
+    <string name="telegramnotfound_title">Telegram not found!</string>
+    <string name="INSTALL">INSTALL</string>
+
+<!--    <string name="title_favorites_wallpaper">Favorites Wallpaper</string>-->
+    <string name="add_to_favorite_stickers">Add to favorite stickers</string>
+    <string name="remove_from_favorites">Remove from favorites stickers</string>
+
+    <string name="add_it_to_favorites_question">Do you want add it to favorites stickers?</string>
+    <string name="remove_from_favorites_question">Do you want remove it from favorites stickers?</string>
+
+    <string name="action_share_image">Share Image</string>
+    <string name="action_save_image">Save Image</string>
+    <string name="desc_add_to_favorite">Add to Favorite</string>
+    <string name="dictionary_all">All Stickers</string>
+    <string name="menu_favorite_stickers">Favorite Stickers</string>
+    <string name="menu_action_random_stickers">Random Stickers</string>
+    <string name="share_qr_code">Share QRcode</string>
+
+    <string name="emptyFavoriteList">The list of favorite stickers is empty</string>
+    <string name="sticker_name">Sticker Name</string>
+    <string name="install_stickers">INSTALL STICKERS</string>
+</resources>

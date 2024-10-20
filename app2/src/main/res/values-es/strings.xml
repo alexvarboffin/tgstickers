@@ -1,0 +1,36 @@
+<resources>
+    <string name="INSTALL">INSTALAR</string>
+    <string name="add_sticker">Añadir conjunto de pegatinas</string>
+    <string name="author_placeholder">Autor: %s</string>
+    <string name="author_unknown">Desconocido</string>
+    <string name="author_add">Autor</string>
+    <string name="categories">Categorías</string>
+    <string name="category_add">Categoría</string>
+    <string name="install_stickers">INSTALAR PEGATINAS</string>
+    <string name="latest_stickers">Últimas pegatinas</string>
+    <string name="link_add">Enlace</string>
+    <string name="loading_stickers">Cargando pegatinas. Por favor espera…</string>
+    <string name="s1">Guardar imagen</string>
+    <string name="s2">¿Permitir que la publicidad guarde la imagen en la galería de imágenes?</string>
+    <string name="s3">Aceptar</string>
+    <string name="s4">Rechazar</string>
+    <string name="s5">Crear evento de calendario</string>
+    <string name="s6">¿Permitir que la publicidad cree un evento de calendario?</string>
+    <string name="report_message">¿Estás seguro de que quieres reportar este conjunto de pegatinas?</string>
+    <string name="report_stickers">Reportar</string>
+    <string name="report_title">Reportar conjunto de pegatinas</string>
+    <string name="submit_add">Enviar</string>
+    <string name="report_submitted">Reporte enviado</string>
+    <string name="telegramnotfound_message">Debes instalar la aplicación oficial de Telegram antes de instalar este conjunto de pegatinas</string>
+    <string name="telegramnotfound_title">¡Telegram no encontrado!</string>
+    <string name="this_application">Esta aplicación</string>
+    <string name="title_activity_settings">Actividad de configuración</string>
+    <string name="title_add">Título</string>
+    <string name="no_internet">No se puede conectar a Internet. Modo sin conexión activado.</string>
+    <string name="sticker_sending">Enviando pegatinas…</string>
+    <string name="sticker_sent">El conjunto de pegatinas ha sido enviado.</string>
+    <string name="sticker_name">Nombre de la pegatina</string>
+    <string name="dictionary_all">Todas las pegatinas</string>
+    <string name="splash_loading">Cargando…</string>
+
+</resources>
