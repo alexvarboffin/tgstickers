@@ -4,15 +4,17 @@
   <component name="GradleSettings">
     <option name="linkedExternalProjectsSettings">
       <GradleProjectSettings>
+        <option name="testRunner" value="CHOOSE_PER_TEST" />
         <option name="externalProjectPath" value="$PROJECT_DIR$" />
         <option name="gradleHome" value="C:/android/gradle/gradle-7.3.3" />
         <option name="gradleJvm" value="#JAVA_HOME" />
         <option name="modules">
           <set>
+            <option value="C:/src/Synced/WalhallaUI/features/permissionResolver" />
+            <option value="C:/src/Synced/WalhallaUI/features/ui" />
+            <option value="C:/src/Synced/WalhallaUI/features/wads" />
+            <option value="C:/src/Synced/WalhallaUI/shared" />
             <option value="$PROJECT_DIR$/../sdk/android/multithreader/threader" />
-            <option value="$PROJECT_DIR$/../sdk/android/ui/features/permissionResolver" />
-            <option value="$PROJECT_DIR$/../sdk/android/ui/features/ui" />
-            <option value="$PROJECT_DIR$/../sdk/android/ui/features/wads" />
             <option value="$PROJECT_DIR$" />
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/app2" />
@@ -20,7 +22,6 @@
             <option value="$PROJECT_DIR$/lib" />
           </set>
         </option>
-        <option name="resolveExternalAnnotations" value="false" />
       </GradleProjectSettings>
     </option>
   </component>
