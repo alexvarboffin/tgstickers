@@ -3,6 +3,7 @@ package com.walhalla.telegramstickers.activity.main;
 import static com.walhalla.core.TypeNavItem.__TAG_CATEGORY_LIST;
 import static com.walhalla.stickers.Pagin.DIVIDER;
 import static com.walhalla.ui.DLog.handleException;
+import static com.walhalla.ui.plugins.DialogAbout.aboutDialog;
 
 import android.annotation.SuppressLint;
 import android.app.ProgressDialog;
@@ -328,7 +329,7 @@ public class MainActivity extends FeatureActivity
     public boolean onOptionsItemSelected(MenuItem item) {
         int itemId = item.getItemId();
         if (itemId == R.id.action_about) {
-            Module_U.aboutDialog(this);
+            aboutDialog(this);
             return true;
         } else if (itemId == R.id.action_privacy_policy) {
             Launcher.openBrowser(this, getString(R.string.url_privacy_policy));

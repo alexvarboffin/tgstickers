@@ -1,193 +1,177 @@
-package com.walhalla.stickers.fragment;
+package com.walhalla.stickers.fragment
 
-import android.content.Context;
-import android.graphics.Color;
-import android.graphics.drawable.ColorDrawable;
-import android.os.Bundle;
-import android.text.TextUtils;
-import android.view.LayoutInflater;
-import android.widget.Toast;
+import android.content.Context
+import android.graphics.Color
+import android.graphics.drawable.ColorDrawable
+import android.os.Bundle
+import android.text.TextUtils
+import android.view.View
+import android.widget.Toast
+import androidx.appcompat.app.AlertDialog
+import androidx.appcompat.app.AppCompatActivity
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentActivity
+import com.walhalla.stickers.AppDatabase
+import com.walhalla.stickers.R
+import com.walhalla.stickers.adapter.AbstractStickerAdapter
+import com.walhalla.stickers.adapter.AbstractStickerAdapter.ItemClickListener
+import com.walhalla.stickers.adapter.empty.EmptyViewModel
+import com.walhalla.stickers.constants.MyIntent
+import com.walhalla.stickers.database.LocalDatabaseRepo
+import com.walhalla.stickers.database.StickerDb
+import com.walhalla.stickers.databinding.RewardDialogLayoutBinding
+import com.walhalla.stickers.utils.TelegramUtils
+import com.walhalla.stickers.wads.KSUtil
+import com.walhalla.ui.DLog.d
+import com.walhalla.ui.plugins.Module_U
+import com.walhalla.utils.AManagerI.RewardManagerCallback
+import com.walhalla.utils.RewardManager
+import androidx.core.graphics.drawable.toDrawable
 
-import androidx.annotation.NonNull;
-import androidx.annotation.Nullable;
-import androidx.appcompat.app.ActionBar;
-import androidx.appcompat.app.AppCompatActivity;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentActivity;
+abstract class AbstractStatusListFragment : Fragment(), FragmentRefreshListener, ItemClickListener,
+    RewardManagerCallback {
+    @JvmField
+    protected var m: KSUtil? = null
+    private var rm: RewardManager? = null
 
-import com.walhalla.stickers.AppDatabase;
-import com.walhalla.stickers.R;
-import com.walhalla.stickers.adapter.AbstractStickerAdapter;
-import com.walhalla.stickers.adapter.empty.EmptyViewModel;
-import com.walhalla.stickers.constants.MyIntent;
-import com.walhalla.stickers.database.LocalDatabaseRepo;
-import com.walhalla.stickers.database.StickerDb;
-import com.walhalla.stickers.databinding.RewardDialogLayoutBinding;
-import com.walhalla.stickers.utils.TelegramUtils;
-import com.walhalla.stickers.wads.KSUtil;
-import com.walhalla.ui.DLog;
-import com.walhalla.ui.plugins.Module_U;
-import com.walhalla.utils.AManagerI;
-import com.walhalla.utils.RewardManager;
-
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
-
-public abstract class AbstractStatusListFragment extends Fragment
-        implements
-        FragmentRefreshListener
-        , AbstractStickerAdapter.ItemClickListener
-        , AManagerI.RewardManagerCallback {
-
-    protected KSUtil m;
-    private RewardManager rm;
-
-    protected AppDatabase db;
-    public AbstractStickerAdapter adapter;
-    protected String title;
+    @JvmField
+    protected var db: AppDatabase? = null
+    @JvmField
+    var adapter: AbstractStickerAdapter? = null
+    @JvmField
+    protected var title: String? = null
 
 
-    @Override
-    public void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        db = LocalDatabaseRepo.getDatabase(getActivity());
-        m = KSUtil.getInstance(getActivity());
-        rm = RewardManager.getInstance();
-        Set<Integer> data = new HashSet<>();
-        data.add(4);
-        data.add(6);
-        data.add(7);
-        data.add(9);
-        m.initialize(data);
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        db = LocalDatabaseRepo.getDatabase(activity)
+        m = KSUtil.getInstance(activity)
+        rm = RewardManager.instance
+        val data: MutableSet<Int?> = HashSet<Int?>()
+        data.add(4)
+        data.add(6)
+        data.add(7)
+        data.add(9)
+        m!!.initialize(data)
 
 
-        rm.loadRewardAd(getActivity());
-        handleInstance();
+        rm!!.loadRewardAd(requireActivity())
+        handleInstance()
     }
 
-    private void handleInstance() {
-        Bundle bundle = getArguments();
+    private fun handleInstance() {
+        val bundle = getArguments()
         if (getArguments() != null) {
-            this.title = bundle.getString(MyIntent.KEY_CAT_NAME);
+            this.title = bundle!!.getString(MyIntent.KEY_CAT_NAME)
         }
-        if (getActivity() != null) {
-            ActionBar actionBar = ((AppCompatActivity) getActivity()).getSupportActionBar();
+        if (activity != null) {
+            val actionBar = (activity as AppCompatActivity).supportActionBar
             if (actionBar != null) {
                 if (TextUtils.isEmpty(title)) {
-                    actionBar.setSubtitle(R.string.dictionary_all);
+                    actionBar.setSubtitle(R.string.dictionary_all)
                 } else {
-                    actionBar.setSubtitle(title);//Favorite quotes, word
+                    actionBar.subtitle = title //Favorite quotes, word
                 }
             }
         }
     }
 
-    @Override
-    public void onRefresh() {
-        List<StickerDb> list;
+    override fun onRefresh() {
+        val list: MutableList<StickerDb?>?
         if (TextUtils.isEmpty(title)) {
-            list = db.stickerDao().getAllStickers();
+            list = db!!.stickerDao().getAllStickers()
         } else {
-            list = db.stickerDao().getFavorite();
+            list = db!!.stickerDao().getFavorite()
         }
-        handleMessage(list);
+        handleMessage(list)
     }
 
-    private void handleMessage(List<StickerDb> message) {
+    private fun handleMessage(message: MutableList<StickerDb?>?) {
         if (message == null || message.isEmpty()) {
-            this.adapter.swap(new EmptyViewModel(""));
-            //this.adapter.swap(new EmptyViewModel(getString(R.string.emptyFavoriteList)));
+            this.adapter!!.swap(EmptyViewModel(""))
 
+            //this.adapter.swap(new EmptyViewModel(getString(R.string.emptyFavoriteList)));
         } else {
-            this.adapter.swap(message);
+            this.adapter!!.swap(message)
         }
     }
 
 
-    private void showUnlockDialog(FragmentActivity activity, StickerDb data, int position) {
+    private fun showUnlockDialog(activity: FragmentActivity, data: StickerDb?, position: Int) {
 //        new AlertDialog.Builder(getContext())
 //                .setTitle("Unlock Item")
 //                .setMessage("Watch an ad to unlock this item?")
 //                .setPositiveButton("OK", (dialog, which) -> showRewardedAd(getActivity(), data, position))
 //                .setNegativeButton("Cancel", null)
 //                .show();
-        androidx.appcompat.app.AlertDialog.Builder builder = new androidx.appcompat.app.AlertDialog.Builder(activity);
-        LayoutInflater inflater = activity.getLayoutInflater();
-        RewardDialogLayoutBinding binding = RewardDialogLayoutBinding.inflate(inflater);
-        builder.setView(binding.getRoot());
-        final androidx.appcompat.app.AlertDialog alertDialog = builder.create();
-        alertDialog.getWindow().setBackgroundDrawable(new ColorDrawable(Color.TRANSPARENT));
-        binding.dPurchase.setOnClickListener(view -> {
-            alertDialog.dismiss();
-            rm.showRewardAdBanner(getActivity(), position, this);
-        });
-        binding.dCancel.setOnClickListener(view -> alertDialog.dismiss());
-        alertDialog.show();
+        val builder = AlertDialog.Builder(activity)
+        val inflater = activity.getLayoutInflater()
+        val binding = RewardDialogLayoutBinding.inflate(inflater)
+        builder.setView(binding.getRoot())
+        val alertDialog = builder.create()
+        alertDialog.window!!.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
+        binding.dPurchase.setOnClickListener(View.OnClickListener { view: View? ->
+            alertDialog.dismiss()
+            rm!!.showRewardAdBanner(requireActivity(), position, this)
+        })
+        binding.dCancel.setOnClickListener(View.OnClickListener { view: View? -> alertDialog.dismiss() })
+        alertDialog.show()
     }
 
-    @Override
-    public void onItemClick(StickerDb data, int adapterPosition) {
-        if (m.isItemLocked(adapterPosition)) {
+    override fun onItemClick(data: StickerDb, adapterPosition: Int) {
+        if (m!!.isItemLocked(adapterPosition)) {
             //data.setLock(LessonState.UNLOCK);
-            showUnlockDialog(getActivity(), data, adapterPosition);
+            showUnlockDialog(requireActivity(), data, adapterPosition)
         } else {
-            handleProxy(data);
+            handleProxy(data)
         }
     }
 
-    protected abstract void handleProxy(StickerDb data);
+    protected abstract fun handleProxy(data: StickerDb)
 
-    @Override
-    public void shareItem(StickerDb sticker) {
-        Module_U.shareText(getContext(), TelegramUtils.ADDSTICKERS_WEB + sticker.link, null);
+    override fun shareItem(sticker: StickerDb) {
+        Module_U.shareText(requireContext(), TelegramUtils.ADDSTICKERS_WEB + sticker.link, null)
     }
 
-    @Override
-    public void successResult7(int position) {
-        DLog.d("@@@@@@");
+    override fun successResult7(position: Int) {
+        d("@@@@@@")
         // User earned the reward.
-        m.unlockItem(position);
+        m!!.unlockItem(position)
         if (this.mainCallback != null) {
-            this.mainCallback.rewardExplode();
+            this.mainCallback!!.rewardExplode()
         } else {
             //Toast.makeText(getActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
         }
-        adapter.notifyItemChanged(position);
+        adapter!!.notifyItemChanged(position)
         //handleProxy(data);
     }
 
-    @Override
-    public void errorShowAds() {
-        Toast.makeText(getContext(), R.string.ad_not_loaded_try_another_time, Toast.LENGTH_SHORT).show();
+    override fun errorShowAds() {
+        Toast.makeText(context, R.string.ad_not_loaded_try_another_time, Toast.LENGTH_SHORT).show()
     }
 
 
     //callback
-    Callback mainCallback;
+    var mainCallback: Callback? = null
 
-    public interface Callback {
-
-//        void showMessage(String s);
-
-        void rewardExplode();
+    interface Callback {
+        //        void showMessage(String s);
+        fun rewardExplode()
     }
 
 
-    @Override
-    public void onAttach(@NonNull Context context) {
-        super.onAttach(context);
-        if (context instanceof Callback) {
-            mainCallback = (Callback) context;
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        if (context is Callback) {
+            mainCallback = context as Callback
         } else {
-            throw new RuntimeException(context + " must implement Callback");
+            throw RuntimeException("$context must implement Callback")
         }
     }
 
 
-    @Override
-    public void onDetach() {
-        super.onDetach();
-        mainCallback = null;
+    override fun onDetach() {
+        super.onDetach()
+        mainCallback = null
     }
 }

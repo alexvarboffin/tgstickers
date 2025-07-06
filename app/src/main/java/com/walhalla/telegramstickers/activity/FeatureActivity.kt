@@ -2,6 +2,11 @@ package com.walhalla.telegramstickers.activity
 
 import com.walhalla.domain.interactors.impl.AdvertInteractorImpl
 import com.walhalla.domain.repository.AdvertRepository
+import com.walhalla.telegramstickers.TApp
+import com.walhalla.ui.DLog
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.MainScope
 
 abstract class FeatureActivity : androidx.appcompat.app.AppCompatActivity() {
     private var wakeLock: android.os.PowerManager.WakeLock? = null
@@ -21,7 +26,7 @@ abstract class FeatureActivity : androidx.appcompat.app.AppCompatActivity() {
 
 
     protected fun loadRepository(): AdvertRepository? {
-        return com.walhalla.telegramstickers.TApp.repository
+        return TApp.repository
     }
 
     //    @Override
@@ -34,8 +39,8 @@ abstract class FeatureActivity : androidx.appcompat.app.AppCompatActivity() {
     //    public boolean onOptionsItemSelected(MenuItem item) {
     //        switch (item.getItemId()) {
     //
-    /**/            case R.string.start_test_again:
-    * /                return false; */
+    /*            case R.string.start_test_again:
+                 return false;
     //
     //            case R.id.action_about:
     //                //Module_U.aboutDialog(this);
@@ -56,13 +61,13 @@ abstract class FeatureActivity : androidx.appcompat.app.AppCompatActivity() {
     //                Module_U.shareThisApp(this);
     //                return true;
     //
-    /**/            case R.id.action_discover_more_app:
-    * /                Module_U.moreApp(this);
-    * /                return true; */
+    /*            case R.id.action_discover_more_app:
+                    Module_U.moreApp(this);
+                    return true;
     //
-    /**/            case R.id.action_exit:
-    * /                this.finish();
-    * /                return true; */
+                case R.id.action_exit:
+                    this.finish();
+                    return true; */
     //
     //            case R.id.action_feedback:
     //                Module_U.feedback(this);
@@ -78,6 +83,7 @@ abstract class FeatureActivity : androidx.appcompat.app.AppCompatActivity() {
     //
     //        //return super.onOptionsItemSelected(item);
     //    }
+
     @android.annotation.SuppressLint("WakelockTimeout")
     override fun onResume() {
         super.onResume()
@@ -94,9 +100,9 @@ abstract class FeatureActivity : androidx.appcompat.app.AppCompatActivity() {
     protected val start_time: kotlin.Long = java.lang.System.currentTimeMillis()
     private val content: android.widget.FrameLayout? = null
 
-    private val callback: com.walhalla.domain.interactors.AdvertInteractor.Callback<android.view.View?> =
-        object : com.walhalla.domain.interactors.AdvertInteractor.Callback<android.view.View?> {
-            override fun onMessageRetrieved(id: kotlin.Int, message: android.view.View) {
+    private val callback: com.walhalla.domain.interactors.AdvertInteractor.Callback<android.view.View> =
+        object : com.walhalla.domain.interactors.AdvertInteractor.Callback<android.view.View> {
+            override fun onMessageRetrieved(id: Int, message: android.view.View) {
                 DLog.d(message.javaClass.getName() + " --> " + message.hashCode())
 
                 if (content != null) {
@@ -136,13 +142,13 @@ abstract class FeatureActivity : androidx.appcompat.app.AppCompatActivity() {
                 }
             }
 
-            override fun onRetrievalFailed(error: kotlin.String?) {
+            override fun onRetrievalFailed(error: kotlin.String) {
                 DLog.d("---->" + error)
             }
         }
 
 
-    protected fun setupAdAtBottom(content: android.widget.FrameLayout?) {
+    protected fun setupAdAtBottom(content: android.widget.FrameLayout) {
         //FrameLayout content = findViewById(android.R.id.content);
 
 
@@ -176,30 +182,28 @@ abstract class FeatureActivity : androidx.appcompat.app.AppCompatActivity() {
 //        addLayoutToContent(linearLayout);
 
 
-        val interactor: AdvertInteractorImpl = AdvertInteractorImpl(
-            ThreadExecutor.getInstance(),
-            MainThreadImpl.getInstance(), loadRepository()
-        )
+        val interactor = AdvertInteractorImpl(CoroutineScope(Dispatchers.IO), MainScope(), loadRepository()!!)
+
         //aa.attach(this);
         //DLog.d("---->" + aa.hashCode());
         interactor.selectView(content, callback)
     } //    private void setSpaceForAd(int height) {
     //        DLog.d("@@@@@@@@" + height);
-    /**/        FrameLayout content = findViewById(android.R.id.content);
-    * /        if (content != null)
+    /*        FrameLayout content = findViewById(android.R.id.content);
+           if (content != null)
     {
-        * /            View child0 = content.getChildAt(0);
-        * /            //child0.setPadding(0, 0, 0, 50);
-        * /
-        * /            FrameLayout.LayoutParams lp = (android.widget.FrameLayout.LayoutParams) child0.getLayoutParams();
-        * /            //lp.bottomMargin = height;
-        * /            child0.setLayoutParams(lp);
-        * /
-    } */
+                    View child0 = content.getChildAt(0);
+                    //child0.setPadding(0, 0, 0, 50);
+
+                    FrameLayout.LayoutParams lp = (android.widget.FrameLayout.LayoutParams) child0.getLayoutParams();
+                    //lp.bottomMargin = height;
+                    child0.setLayoutParams(lp);
+
+    }
     //    }
-    /**/    AdView adView = new AdView(this);
-    * /    adView.setAdSize(AdSize.BANNER);
-    * /    adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); */
+        AdView adView = new AdView(this);
+       adView.setAdSize(AdSize.BANNER);
+        adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); */
     //
     //    private void addLayoutToContent(View ad) {
     //        content.addView(ad);

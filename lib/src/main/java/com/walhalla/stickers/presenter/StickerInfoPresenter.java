@@ -36,7 +36,7 @@ public class StickerInfoPresenter {
         if (ActivityCompat.shouldShowRequestPermissionRationale(activity, perm)) {
             String message = activity.getString(R.string.this_permission_is_needed);
             new AlertDialog.Builder(activity)
-                    .setTitle(R.string.permission_title_needed)
+                    .setTitle(R.string.alert_perm_title)
                     .setMessage(message + "\n" + perm)
                     .setPositiveButton(android.R.string.ok, (dialog, which) ->
                             {

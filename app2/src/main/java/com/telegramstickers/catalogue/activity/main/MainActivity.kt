@@ -1,199 +1,185 @@
-package com.telegramstickers.catalogue.activity.main;
+package com.telegramstickers.catalogue.activity.main
 
-import static com.walhalla.stickers.Pagin.DIVIDER;
-import static com.walhalla.ui.DLog.handleException;
+import android.app.ProgressDialog
+import android.os.Bundle
+import android.os.Handler
+import android.os.Looper
+import android.view.Menu
+import android.view.MenuItem
+import android.view.View
+import android.view.inputmethod.InputMethodManager
+import android.widget.TextView
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.core.content.ContextCompat
+import androidx.core.view.GravityCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentManager
+import com.google.android.material.navigation.NavigationView
+import com.google.android.material.snackbar.Snackbar
+import com.telegramstickers.catalogue.R
+import com.telegramstickers.catalogue.activity.FeatureActivity
+import com.telegramstickers.catalogue.fragment.BaseDBFragment
+import com.walhalla.core.TypeNavItem
+import com.walhalla.library.activity.GDPR
+import com.walhalla.stickers.NavigationCls
+import com.walhalla.stickers.Pagin
+import com.walhalla.stickers.database.StickerDb
+import com.walhalla.stickers.databinding.ActivityMainBinding
+import com.walhalla.stickers.fragment.AbstractStatusListFragment
+import com.walhalla.stickers.fragment.FragmentRefreshListener
+import com.walhalla.telegramstickers.MainPresenter
+import com.walhalla.telegramstickers.ResourceHelper
+import com.walhalla.ui.DLog.d
+import com.walhalla.ui.DLog.getAppVersion
+import com.walhalla.ui.DLog.handleException
+import com.walhalla.ui.plugins.DialogAbout.aboutDialog
+import com.walhalla.ui.plugins.Launcher.openBrowser
+import com.walhalla.ui.plugins.Launcher.rateUs
+import com.walhalla.ui.plugins.Module_U
+import com.walhalla.ui.plugins.Module_U.feedback
+import com.walhalla.ui.plugins.Module_U.moreApp
+import com.walhalla.ui.plugins.Module_U.shareThisApp
+import nl.dionsegijn.konfetti.core.Party
+import nl.dionsegijn.konfetti.core.PartyFactory
+import nl.dionsegijn.konfetti.core.Position.Relative
+import nl.dionsegijn.konfetti.core.emitter.Emitter
+import nl.dionsegijn.konfetti.core.models.Shape
+import nl.dionsegijn.konfetti.core.models.Shape.Circle
+import nl.dionsegijn.konfetti.core.models.Shape.DrawableShape
+import nl.dionsegijn.konfetti.core.models.Shape.Square
+import nl.dionsegijn.konfetti.xml.KonfettiView
+import nl.dionsegijn.konfetti.xml.listeners.OnParticleSystemUpdateListener
+import java.util.Arrays
+import java.util.concurrent.TimeUnit
 
-import android.app.ProgressDialog;
-import android.graphics.drawable.Drawable;
-import android.os.Bundle;
-import android.os.Handler;
-import android.os.Looper;
-import android.view.Menu;
-import android.view.MenuItem;
-import android.view.View;
-import android.view.inputmethod.InputMethodManager;
-import android.widget.TextView;
+class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedListener,
+    MainFragment.FCallback, AbstractStatusListFragment.Callback {
+    private var fragmentRefreshListener: FragmentRefreshListener? = null
 
-import androidx.annotation.NonNull;
-import androidx.appcompat.app.ActionBarDrawerToggle;
-import androidx.core.content.ContextCompat;
-import androidx.core.view.GravityCompat;
-import androidx.fragment.app.Fragment;
-import androidx.fragment.app.FragmentManager;
-import androidx.fragment.app.FragmentTransaction;
-
-import com.google.android.material.navigation.NavigationView;
-
-import com.google.android.material.snackbar.Snackbar;
-import com.telegramstickers.catalogue.R;
-import com.telegramstickers.catalogue.activity.FeatureActivity;
-
-import com.walhalla.core.Navigator;
-import com.walhalla.core.TypeNavItem;
-import com.walhalla.library.activity.GDPR;
-
-import com.walhalla.stickers.NavigationCls;
-import com.walhalla.stickers.database.StickerDb;
-import com.walhalla.stickers.databinding.ActivityMainBinding;
-import com.walhalla.stickers.fragment.AbstractStatusListFragment;
-import com.walhalla.stickers.fragment.FragmentRefreshListener;
-import com.walhalla.telegramstickers.MainPresenter;
-
-import com.walhalla.telegramstickers.ResourceHelper;
-
-import com.telegramstickers.catalogue.fragment.BaseDBFragment;
-
-import com.walhalla.ui.DLog;
-import com.walhalla.ui.plugins.Launcher;
-import com.walhalla.ui.plugins.Module_U;
-
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.TimeUnit;
-
-import nl.dionsegijn.konfetti.core.Party;
-import nl.dionsegijn.konfetti.core.PartyFactory;
-import nl.dionsegijn.konfetti.core.Position;
-import nl.dionsegijn.konfetti.core.emitter.Emitter;
-import nl.dionsegijn.konfetti.core.emitter.EmitterConfig;
-import nl.dionsegijn.konfetti.core.models.Shape;
-import nl.dionsegijn.konfetti.xml.KonfettiView;
-import nl.dionsegijn.konfetti.xml.listeners.OnParticleSystemUpdateListener;
-
-public class MainActivity extends FeatureActivity
-        implements NavigationView.OnNavigationItemSelectedListener
-        , MainFragment.FCallback
-        , AbstractStatusListFragment.Callback {
-
-    private FragmentRefreshListener fragmentRefreshListener;
-
-    ArrayList<HashMap<String, String>> stickersList;
+    var stickersList: ArrayList<HashMap<String?, String?>?>? = null
 
 
-    private ProgressDialog dialog;
+    private var dialog: ProgressDialog? = null
 
-    private boolean doubleBackToExitPressedOnce;
-    private MainPresenter presenter;
+    private var doubleBackToExitPressedOnce = false
+    private var presenter: MainPresenter? = null
 
-    private Thread mThread;
+    private var mThread: Thread? = null
 
-    private ResourceHelper utils;
+    private var utils: ResourceHelper? = null
 
-    private Handler mHandler;
+    private var mHandler: Handler? = null
 
-    private ActivityMainBinding binding;
-    private Shape.DrawableShape drawableShape;
+    private var binding: ActivityMainBinding? = null
+    private var drawableShape: DrawableShape? = null
 
 
-    public void successResult00(List<StickerDb> arrayList) {
-        if (this.dialog != null && this.dialog.isShowing()) {
-            this.dialog.dismiss();
+    fun successResult00(arrayList: MutableList<StickerDb?>?) {
+        if (this.dialog != null && this.dialog!!.isShowing()) {
+            this.dialog!!.dismiss()
 
             if (this.getFragmentRefreshListener() != null) {
-                this.getFragmentRefreshListener().onRefresh();
+                this.getFragmentRefreshListener()!!.onRefresh()
             }
         }
     }
 
-    @Override
-    public boolean onNavigationItemSelected(@NonNull MenuItem menuItem) {
-        final int itemId = menuItem.getItemId();
-        boolean found = false;
-        String CURRENT_TAG = String.valueOf(menuItem.getTitle());
-        for (Navigator nav : NavigationCls.mNav0) {
+    override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
+        val itemId = menuItem.getItemId()
+        var found = false
+        var CURRENT_TAG = menuItem.getTitle().toString()
+        for (nav in NavigationCls.mNav0) {
             if (itemId == nav.id) {
-                CURRENT_TAG = nav.tag;
-                found = true;
-                break;
+                CURRENT_TAG = nav.tag
+                found = true
+                break
             }
         }
 
-//        if (itemId == R.id.action_my_dreams) {
-////                    navItemIndex = 0;
-////                    CURRENT_TAG = TAG_MY_DREAMS;
+
+        //        if (itemId == R.id.action_my_dreams) {
+        /*                    navItemIndex = 0;
+        * /                    CURRENT_TAG = TAG_MY_DREAMS; */
 //            binding.drawerLayout.closeDrawers();
 //            //@@@ startActivity(new Intent(ButtonActivity.this, Diary.class));
 //            return true;
 //
-////                case R.itemId.action_sleep_date:
-////                    navItemIndex = 0;
-////                    CURRENT_TAG = TAG_SLEEP_DATE;
-////                    break;
-//
-////                case R.itemId.home:
-//
-//
-////                case R.itemId.action_settings:
-////                    navItemIndex = 2;
-////                    CURRENT_TAG = TAG_SETTINGS;
-////                    break;
-//
-////                case R.itemId.action_about_apps:
-////                    // launch new intent instead of loading fragment
-////                    //startActivity(new Intent(ButtonActivity.this, AboutUsActivity.class));
-////                    mBinding.drawerLayout.closeDrawers();
-////                    return true;
-////
-////                case R.itemId.nav_share:
-////                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
-////                    shareIntent.setType(Const.MIME_TEXT);
-////                    shareIntent.putExtra(Intent.EXTRA_TEXT, Const.SHARE_MESSAGE_TEXT);
-////                    startActivity(Intent.createChooser(shareIntent, Const.SHARE_TITLE));
-////                    return true;
-//
-//
-////                    case R.itemId.nav_privacy_policy:
-////                        // launch new intent instead of loading fragment
-////                        startActivity(new Intent(ButtonActivity.this, PrivacyPolicyActivity.class));
-////                        mBinding.drawerLayout.closeDrawers();
-////                        return true;
+        /*                case R.itemId.action_sleep_date:
+                    navItemIndex = 0;
+                    CURRENT_TAG = TAG_SLEEP_DATE;
+                    break;
+
+                case R.itemId.home:
+
+
+                case R.itemId.action_settings:
+                    navItemIndex = 2;
+                    CURRENT_TAG = TAG_SETTINGS;
+                    break;
+
+                case R.itemId.action_about_apps:
+                    // launch new intent instead of loading fragment
+                    //startActivity(new Intent(ButtonActivity.this, AboutUsActivity.class));
+                    mBinding.drawerLayout.closeDrawers();
+                    return true;
+
+                case R.itemId.nav_share:
+                    Intent shareIntent = new Intent(Intent.ACTION_SEND);
+                    shareIntent.setType(Const.MIME_TEXT);
+                    shareIntent.putExtra(Intent.EXTRA_TEXT, Const.SHARE_MESSAGE_TEXT);
+                    startActivity(Intent.createChooser(shareIntent, Const.SHARE_TITLE));
+                    return true;
+
+
+                    case R.itemId.nav_privacy_policy:
+                        // launch new intent instead of loading fragment
+                        startActivity(new Intent(ButtonActivity.this, PrivacyPolicyActivity.class));
+                        mBinding.drawerLayout.closeDrawers();
+                        return true;*/
 //        }
-
-
         if (!found) {
-            if (utils.isMenuPressed(itemId)) {
+            if (utils!!.isMenuPressed(itemId)) {
 //                        runnable = () -> {
 //                            RootForecastsFragment fragment = RootForecastsFragment.newInstance(zodiacs.get(itemId - 1));
 //                            replaceFragment(fragment);
 //                        };
                 //navItemIndex = 0;
-                CURRENT_TAG = TypeNavItem.__TAG_CATEGORY_LIST + DIVIDER + utils.toType(itemId);
+                CURRENT_TAG =
+                    TypeNavItem.__TAG_CATEGORY_LIST + Pagin.DIVIDER + utils!!.toType(itemId)
             }
         }
+
         //else {navItemIndex = 1;}
 
         //Checking if the menuItem is in checked state or not, if not make it in checked state
         if (menuItem.isChecked()) {
-            menuItem.setChecked(false);
+            menuItem.setChecked(false)
         } else {
-            menuItem.setChecked(true);
+            menuItem.setChecked(true)
         }
-        menuItem.setChecked(true);
+        menuItem.setChecked(true)
 
-        getFragmentByTagName(CURRENT_TAG);
-//            DrawerLayout drawer = findViewById(R.itemId.drawer_layout);
+        getFragmentByTagName(CURRENT_TAG)
+        //            DrawerLayout drawer = findViewById(R.itemId.drawer_layout);
 //            drawer.closeDrawer(GravityCompat.START);
-        return true;
+        return true
     }
 
-    @Override
-    public void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        binding = ActivityMainBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        final Drawable drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_heart);
+    public override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        binding = ActivityMainBinding.inflate(getLayoutInflater())
+        setContentView(binding!!.getRoot())
+        val drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_heart)
         if (drawable != null) {
-            drawableShape = new Shape.DrawableShape(drawable, true, true);
+            drawableShape = DrawableShape(drawable, true, true)
         }
-        Handler handler = new Handler(Looper.getMainLooper());
-        presenter = new MainPresenter(this, handler, this);
+        val handler = Handler(Looper.getMainLooper())
+        presenter = MainPresenter(this, handler, this)
 
-        GDPR gdpr = new GDPR();
-        gdpr.init(this);
+        val gdpr = GDPR()
+        gdpr.init(this)
 
-//        AdRequest build = new AdRequest.Builder().build();
+        //        AdRequest build = new AdRequest.Builder().build();
 //        mBind.adView.setAdListener(new AdListener() {
 //            @Override
 //            public void onAdLoaded() {
@@ -203,20 +189,18 @@ public class MainActivity extends FeatureActivity
 //            }
 //        });
 //        mBind.adView.loadAd(build);
-        utils = ResourceHelper.getInstance(this);
-        setSupportActionBar(binding.toolbar);
-        setTitle(R.string.app_title);
+        utils = ResourceHelper.getInstance(this)
+        setSupportActionBar(binding!!.toolbar)
+        setTitle(R.string.app_title)
 
         //__CURRENT_TAG__ = Constants.TAG_DICTIONARY + DIVIDER + Constants.D_ALL;
         //map.put(R.id.action_favorite_statuses, Constants.TAG_SHOW_FAVORITE_STATUSES);
         //map.put(R.id.action_random_statuses, Constants.TAG_SHOW_RANDOM_STATUSES);
-
-        mHandler = new Handler();
-        setUpNavigationView();
+        mHandler = Handler()
+        setUpNavigationView()
 
         //this.mFirebaseAnalytics = FirebaseAnalytics.getInstance(this);
-
-        presenter.onCreateEvent();
+        presenter!!.onCreateEvent()
 
         if (savedInstanceState != null) {
 //            Parcelable parcelable = savedInstanceState.getParcelable(STATE_QUESTION);
@@ -226,31 +210,38 @@ public class MainActivity extends FeatureActivity
 //            onSetMachine(State.RESUME_GAME);
         } else {
             getSupportFragmentManager().beginTransaction()
-                    .add(binding.frameContainer.getId(), new MainFragment())
-                    .commit();
+                .add(binding!!.frameContainer.getId(), MainFragment())
+                .commit()
         }
 
 
-        setupAdAtBottom(binding.bottomButton);
+        setupAdAtBottom(binding!!.bottomButton)
     }
 
 
-    private void setUpNavigationView() {
-
-        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this,
-                binding.drawerLayout, binding.toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close) {
-            @Override
-            public void onDrawerClosed(View drawerView) {
+    private fun setUpNavigationView() {
+        val toggle: ActionBarDrawerToggle = object : ActionBarDrawerToggle(
+            this,
+            binding!!.drawerLayout,
+            binding!!.toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        ) {
+            override fun onDrawerClosed(drawerView: View) {
                 // Code here will be triggered once the drawer closes as we dont want anything to happen so we leave this blank
-                super.onDrawerClosed(drawerView);
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                super.onDrawerClosed(drawerView!!)
+                val inputMethodManager =
+                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
                 if (getCurrentFocus() != null) {
                     if (inputMethodManager != null) {
-                        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                        inputMethodManager.hideSoftInputFromWindow(
+                            getCurrentFocus()!!.getWindowToken(),
+                            0
+                        )
                     }
                 }
 
-//Or
+                //Or
 //                InputMethodManager inputManager = (InputMethodManager) ButtonActivity.this.getSystemService(Context.INPUT_METHOD_SERVICE);
 //                View v = ButtonActivity.this.getCurrentFocus();
 //                if (v != null) {
@@ -259,92 +250,91 @@ public class MainActivity extends FeatureActivity
 //                }
             }
 
-            @Override
-            public void onDrawerOpened(View drawerView) {
+            override fun onDrawerOpened(drawerView: View) {
                 // Code here will be triggered once the drawer open as we dont want anything to happen so we leave this blank
-                super.onDrawerOpened(drawerView);
-                InputMethodManager inputMethodManager = (InputMethodManager) getSystemService(INPUT_METHOD_SERVICE);
+                super.onDrawerOpened(drawerView!!)
+                val inputMethodManager =
+                    getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
                 if (getCurrentFocus() != null) {
                     if (inputMethodManager != null) {
-                        inputMethodManager.hideSoftInputFromWindow(getCurrentFocus().getWindowToken(), 0);
+                        inputMethodManager.hideSoftInputFromWindow(
+                            getCurrentFocus()!!.getWindowToken(),
+                            0
+                        )
                     }
                 }
             }
-        };
-        binding.drawerLayout.addDrawerListener(toggle);//Setting the actionbarToggle to drawer layout
-        toggle.syncState();//calling sync state is necessary or else your hamburger icon wont show up
+        }
+        binding!!.drawerLayout.addDrawerListener(toggle) //Setting the actionbarToggle to drawer layout
+        toggle.syncState() //calling sync state is necessary or else your hamburger icon wont show up
 
-//        final Menu menu = navigationView.getMenu();
+        //        final Menu menu = navigationView.getMenu();
 //        for (int i = 0; i < menu.size(); i++) {
 //            MenuItem item = menu.getItem(i);
 //            DLog.d("" + item.toString()+" "+item.getGroupId()+" "+item.getItemId()+" "+item.hasSubMenu());
 //        }
-
-        binding.navView.setNavigationItemSelectedListener(this);
-        Menu menu = binding.navView.getMenu();
-        final Menu mainMenu = binding.navView.getMenu();//inject in root
+        binding!!.navView.setNavigationItemSelectedListener(this)
+        var menu: Menu? = binding!!.navView.getMenu()
+        val mainMenu = binding!!.navView.getMenu() //inject in root
         if (mainMenu.size() > 0) {
             //inject in submenu
-            MenuItem menuItem = mainMenu.getItem(0);
+            val menuItem = mainMenu.getItem(0)
             if (menuItem.hasSubMenu()) {
-                menu = menuItem.getSubMenu();
+                menu = menuItem.getSubMenu()
             }
         }
 
-        View header = binding.navView.getHeaderView(0);
-        ((TextView) header.findViewById(R.id.textView)).setText(DLog.getAppVersion(this));
+        val header = binding!!.navView.getHeaderView(0)
+        (header.findViewById<View?>(R.id.textView) as TextView).setText(getAppVersion(this))
 
         //TypedArray typedArray = getResources().obtainTypedArray(R.array.dictionaryList);
         //CURRENT_TAG = Constants.__TAG_CATEGORY_LIST + DIVIDER + Constants.D_ALL;
-
         if (menu != null) {
-            for (int res : utils.categories()) {
-                menu.add(1, res, Menu.FIRST, res).setIcon(R.drawable.ic_star);
+            for (res in utils!!.categories()) {
+                menu.add(1, res, Menu.FIRST, res).setIcon(R.drawable.ic_star)
                 //.setIconTintList(ContextCompat.getColorStateList(this, R.color.t1));
                 //subMenu.add(0, sign.getId(), Menu.FIRST, sign.getName()).setIcon(sign.getSignIcon());
                 //subMenu.add(1, R.string.sign_02, Menu.FIRST, getString(R.string.sign_01)).setIcon(R.drawable.ic_aries);
             }
         }
-//-- menu.add(1, R.id.action_settings, Menu.FIRST + 1, R.string.action_settings);
+        //-- menu.add(1, R.id.action_settings, Menu.FIRST + 1, R.string.action_settings);
 //        menu.add(1, R.id.action_about, Menu.FIRST + 1, R.string.action_about);
 //        menu.add(1, R.id.action_exit, Menu.FIRST + 1, R.string.action_exit);
     }
 
-    @Override
-    public boolean onCreateOptionsMenu(Menu menu) {
-        getMenuInflater().inflate(R.menu.menu_main, menu);
-//        menu.add("x").setOnMenuItemClickListener(v->{
+    override fun onCreateOptionsMenu(menu: Menu?): Boolean {
+        getMenuInflater().inflate(R.menu.menu_main, menu)
+        //        menu.add("x").setOnMenuItemClickListener(v->{
 //            throw new RuntimeException("Test Crash"); // Force a crash
 //        });
-        return super.onCreateOptionsMenu(menu);
+        return super.onCreateOptionsMenu(menu)
     }
 
 
-    @Override
-    public boolean onOptionsItemSelected(MenuItem item) {
-        int itemId = item.getItemId();
+    override fun onOptionsItemSelected(item: MenuItem): Boolean {
+        val itemId = item.getItemId()
         if (itemId == R.id.action_about) {
-            Module_U.aboutDialog(this);
-            return true;
+            aboutDialog(this)
+            return true
         } else if (itemId == R.id.action_privacy_policy) {
-            Launcher.openBrowser(this, getString(R.string.url_privacy_policy));
-            return true;
+            openBrowser(this, getString(R.string.url_privacy_policy))
+            return true
         } else if (itemId == R.id.action_rate_app) {
-            Launcher.rateUs(this);
-            return true;
+            rateUs(this)
+            return true
         } else if (itemId == R.id.action_share_app) {
-            Module_U.shareThisApp(this);
-            return true;
+            shareThisApp(this)
+            return true
         } else if (itemId == R.id.action_discover_more_app) {
-            Module_U.moreApp(this);
-            return true;
+            moreApp(this)
+            return true
         } else if (itemId == R.id.action_feedback) {
-            Module_U.feedback(this);
-            return true;
+            feedback(this)
+            return true
         } else {
-            return super.onOptionsItemSelected(item);
+            return super.onOptionsItemSelected(item)
         }
-//            case R.id.action_exit:
+        //            case R.id.action_exit:
 //                this.finish();
 //                return true;//case R.id.action_more_app_01:
 //                Module_U.moreApp(this, "com.walhalla.ttloader");
@@ -356,122 +346,119 @@ public class MainActivity extends FeatureActivity
     }
 
 
-    public void refreshDB() {
-        this.stickersList = new ArrayList<>();
-        showDialog();
-        presenter.execute();
+    fun refreshDB() {
+        this.stickersList = ArrayList<HashMap<String?, String?>?>()
+        showDialog()
+        presenter!!.execute()
     }
 
-    private void showDialog() {
-        this.dialog = new ProgressDialog(MainActivity.this);
-        this.dialog.setMessage(MainActivity.this.getString(R.string.loading_stickers));
-        this.dialog.setIndeterminate(false);
-        this.dialog.setCancelable(false);
-        this.dialog.show();
-    }
-
-
-//    public ActionBarHandler getActionBarHandler() {
-//        return new ActionBarSearchHandler(this, str -> {
-//            db.open();
-//            StickerDb sticker = db.getSticker(str);
-//            //db--close();
-//            if (sticker != null) {
-//                Intent intent = new Intent(ButtonActivity.this.getApplicationContext(), StickerInfoActivity.class);
-//                intent.putExtra(KEY_STICKERS, sticker.id);
-//                ButtonActivity.this.startActivity(intent);
-//            }
-//        })
-//                .enableAutoCompletion().setAutoCompletionMode(ToolbarSearch.AutoCompletionMode.CONTAINS)
-//                .enableAutoCompletionDynamic((str, onSearchingListener) -> {
-//                    db.open();
-//                    ArrayList<StickerDb> allStickers = db.getAllStickers();
-//                    //db--close();
-//                    List<String> arrayList = new ArrayList<>();
-//                    for (int i = 0; i < allStickers.size(); i++) {
-//                        if (allStickers.get(i).name.toLowerCase().contains(str.toLowerCase())) {
-//                            arrayList.add(allStickers.get(i).name);
-//                        }
-//                    }
-//                    if (arrayList.size() > 0) {
-//                        onSearchingListener.onGettingResults(arrayList);
-//                    }
-//                });
-//    }
-
-
-//    public NavigationDrawerTopHandler getNavigationDrawerTopHandler() {
-//        return new NavigationDrawerTopHandler(getApplicationContext())
-//                .addItem(getString(R.string.latest_stickers),
-//                        R.drawable.ic_star,
-//                        new MainFragment())
-//                        .addSection(getString(R.string.categories))
-//                .addItem(getString(categories()[0]),
-//                        R.drawable.ic_star,
-//                        BaseDBFragment.newInstance(Clazz.animals)
-//                ).addItem(getString(categories()[1]),
-//                        R.drawable.ic_star,
-//                        BaseDBFragment.newInstance(Clazz.cartoon)
-//                )
-//                .addItem(getString(categories()[2]),
-//                        BaseDBFragment.newInstance(Clazz.faces)
-//                )
-//                .addItem(getString(categories()[3]),
-//                        BaseDBFragment.newInstance(Clazz.movies)
-//                )
-//                .addItem(getString(categories()[4]),
-//                        BaseDBFragment.newInstance(Clazz.games)
-//                )
-//                .addItem(getString(categories()[5]),
-//                        BaseDBFragment.newInstance(Clazz.memes)
-//                )
-//                .addItem(getString(categories()[6]),
-//                        BaseDBFragment.newInstance(Clazz.messages)
-//                )
-//                .addItem(getString(categories()[7]),
-//                        BaseDBFragment.newInstance(Clazz.others)
-//                )
-//                .addItem(getString(categories()[8]),
-//                        R.drawable.ic_star, new PrivacyFragment());
-//    }
-//
-//    @Override
-//    public NavigationDrawerBottomHandler getNavigationDrawerBottomHandler() {
-//        return new NavigationDrawerBottomHandler(getApplicationContext())
-//                .addHelpAndFeedback(view -> ButtonActivity.this.startActivity(new Intent(ButtonActivity.this.getApplicationContext(), FeedbackFragment.class)));
-//    }
-
-
-    public FragmentRefreshListener getFragmentRefreshListener() {
-        return this.fragmentRefreshListener;
-    }
-
-    public void setFragmentRefreshListener(FragmentRefreshListener listener) {
-        this.fragmentRefreshListener = listener;
+    private fun showDialog() {
+        this.dialog = ProgressDialog(this@MainActivity)
+        this.dialog!!.setMessage(this@MainActivity.getString(R.string.loading_stickers))
+        this.dialog!!.setIndeterminate(false)
+        this.dialog!!.setCancelable(false)
+        this.dialog!!.show()
     }
 
 
-    @Override
-    public void onStart() {
-        super.onStart();
+    //    public ActionBarHandler getActionBarHandler() {
+    //        return new ActionBarSearchHandler(this, str -> {
+    //            db.open();
+    //            StickerDb sticker = db.getSticker(str);
+    //            //db--close();
+    //            if (sticker != null) {
+    //                Intent intent = new Intent(ButtonActivity.this.getApplicationContext(), StickerInfoActivity.class);
+    //                intent.putExtra(KEY_STICKERS, sticker.id);
+    //                ButtonActivity.this.startActivity(intent);
+    //            }
+    //        })
+    //                .enableAutoCompletion().setAutoCompletionMode(ToolbarSearch.AutoCompletionMode.CONTAINS)
+    //                .enableAutoCompletionDynamic((str, onSearchingListener) -> {
+    //                    db.open();
+    //                    ArrayList<StickerDb> allStickers = db.getAllStickers();
+    //                    //db--close();
+    //                    List<String> arrayList = new ArrayList<>();
+    //                    for (int i = 0; i < allStickers.size(); i++) {
+    //                        if (allStickers.get(i).name.toLowerCase().contains(str.toLowerCase())) {
+    //                            arrayList.add(allStickers.get(i).name);
+    //                        }
+    //                    }
+    //                    if (arrayList.size() > 0) {
+    //                        onSearchingListener.onGettingResults(arrayList);
+    //                    }
+    //                });
+    //    }
+    //    public NavigationDrawerTopHandler getNavigationDrawerTopHandler() {
+    //        return new NavigationDrawerTopHandler(getApplicationContext())
+    //                .addItem(getString(R.string.latest_stickers),
+    //                        R.drawable.ic_star,
+    //                        new MainFragment())
+    //                        .addSection(getString(R.string.categories))
+    //                .addItem(getString(categories()[0]),
+    //                        R.drawable.ic_star,
+    //                        BaseDBFragment.newInstance(Clazz.animals)
+    //                ).addItem(getString(categories()[1]),
+    //                        R.drawable.ic_star,
+    //                        BaseDBFragment.newInstance(Clazz.cartoon)
+    //                )
+    //                .addItem(getString(categories()[2]),
+    //                        BaseDBFragment.newInstance(Clazz.faces)
+    //                )
+    //                .addItem(getString(categories()[3]),
+    //                        BaseDBFragment.newInstance(Clazz.movies)
+    //                )
+    //                .addItem(getString(categories()[4]),
+    //                        BaseDBFragment.newInstance(Clazz.games)
+    //                )
+    //                .addItem(getString(categories()[5]),
+    //                        BaseDBFragment.newInstance(Clazz.memes)
+    //                )
+    //                .addItem(getString(categories()[6]),
+    //                        BaseDBFragment.newInstance(Clazz.messages)
+    //                )
+    //                .addItem(getString(categories()[7]),
+    //                        BaseDBFragment.newInstance(Clazz.others)
+    //                )
+    //                .addItem(getString(categories()[8]),
+    //                        R.drawable.ic_star, new PrivacyFragment());
+    //    }
+    //
+    //    @Override
+    //    public NavigationDrawerBottomHandler getNavigationDrawerBottomHandler() {
+    //        return new NavigationDrawerBottomHandler(getApplicationContext())
+    //                .addHelpAndFeedback(view -> ButtonActivity.this.startActivity(new Intent(ButtonActivity.this.getApplicationContext(), FeedbackFragment.class)));
+    //    }
+    fun getFragmentRefreshListener(): FragmentRefreshListener? {
+        return this.fragmentRefreshListener
+    }
+
+    override fun setFragmentRefreshListener(listener: FragmentRefreshListener?) {
+        this.fragmentRefreshListener = listener
+    }
+
+
+    public override fun onStart() {
+        super.onStart()
         //RateThisApp.initialize(this, null);
         //RateThisApp.getInstance(this).showRateDialogIfNeeded(false);
     }
 
-    @Override
-    public void onBackPressed() {
-        if (binding.drawerLayout.isDrawerOpen(GravityCompat.START)) {
-            binding.drawerLayout.closeDrawer(GravityCompat.START);
+    override fun onBackPressed() {
+        if (binding!!.drawerLayout.isDrawerOpen(GravityCompat.START)) {
+            binding!!.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             //Pressed back => return to home screen
-            int count = getSupportFragmentManager().getBackStackEntryCount();
+            val count = getSupportFragmentManager().getBackStackEntryCount()
             if (getSupportActionBar() != null) {
-                getSupportActionBar().setHomeButtonEnabled(count > 0);
+                getSupportActionBar()!!.setHomeButtonEnabled(count > 0)
             }
             if (count > 0) {
-                FragmentManager fm = getSupportFragmentManager();
-                fm.popBackStack(fm.getBackStackEntryAt(0).getId(), FragmentManager.POP_BACK_STACK_INCLUSIVE);
-            } else {//count == 0
+                val fm = getSupportFragmentManager()
+                fm.popBackStack(
+                    fm.getBackStackEntryAt(0).getId(),
+                    FragmentManager.POP_BACK_STACK_INCLUSIVE
+                )
+            } else { //count == 0
 
 
 //                Dialog
@@ -492,43 +479,45 @@ public class MainActivity extends FeatureActivity
 
 
                 if (doubleBackToExitPressedOnce) {
-                    super.onBackPressed();
+                    super.onBackPressed()
                     //moveTaskToBack(true);
-                    return;
+                    return
                 }
 
-                this.doubleBackToExitPressedOnce = true;
-                backPressedToast();
-                new Handler().postDelayed(() -> doubleBackToExitPressedOnce = false, 1500);
+                this.doubleBackToExitPressedOnce = true
+                backPressedToast()
+                Handler().postDelayed(Runnable { doubleBackToExitPressedOnce = false }, 1500)
             }
         }
     }
 
-    private void backPressedToast() {
+    private fun backPressedToast() {
         //View view = findViewById(R.id.cLayout);
         //View view = findViewById(android.R.id.content);
-        Snackbar.make(binding.coordinatorLayout, R.string.press_again_to_exit, Snackbar.LENGTH_LONG).setAction("Action", null).show();
+        Snackbar.make(
+            binding!!.coordinatorLayout,
+            R.string.press_again_to_exit,
+            Snackbar.LENGTH_LONG
+        ).setAction("Action", null).show()
     }
 
 
-//    public void backButtonHandler() {
-//        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-//        builder.setTitle(R.string.leave_title);
-//        builder.setMessage(R.string.leave_message);
-//        builder.setIcon(R.mipmap.ic_launcher);
-//        builder.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> ButtonActivity.this.finish());
-//        builder.setNegativeButton(android.R.string.no, (dialogInterface, i) -> dialogInterface.cancel());
-//        builder.show();
-//    }
-
-    private void dismissProgressDialog() {
-        if (this.dialog != null && this.dialog.isShowing()) {
-            this.dialog.dismiss();
+    //    public void backButtonHandler() {
+    //        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+    //        builder.setTitle(R.string.leave_title);
+    //        builder.setMessage(R.string.leave_message);
+    //        builder.setIcon(R.mipmap.ic_launcher);
+    //        builder.setPositiveButton(android.R.string.yes, (dialogInterface, i) -> ButtonActivity.this.finish());
+    //        builder.setNegativeButton(android.R.string.no, (dialogInterface, i) -> dialogInterface.cancel());
+    //        builder.show();
+    //    }
+    private fun dismissProgressDialog() {
+        if (this.dialog != null && this.dialog!!.isShowing()) {
+            this.dialog!!.dismiss()
         }
     }
 
-    public void getFragmentByTagName(String currentTag) {
-
+    fun getFragmentByTagName(currentTag: String) {
         // selecting appropriate nav menu item
         //selectNavMenu();
 
@@ -537,21 +526,24 @@ public class MainActivity extends FeatureActivity
 
         // if user select the current navigation menu again, don't do anything
         // just close the navigation drawer
+
         if (getSupportFragmentManager().findFragmentByTag(currentTag) != null) {
-            binding.drawerLayout.closeDrawers();
+            binding!!.drawerLayout.closeDrawers()
             // show or hide the fab button
             //toggleFab();
-            return;
+            return
         }
+
         //Toast.makeText(this, "@@" + __CURRENT_TAG__, Toast.LENGTH_SHORT).show();
 
         // show or hide the fab button
         //toggleFab();
         //Closing drawer on item click
-        binding.drawerLayout.closeDrawers();
+        binding!!.drawerLayout.closeDrawers()
 
         // refresh toolbar menu
-        invalidateOptionsMenu();
+        invalidateOptionsMenu()
+
 
         // Sometimes, when fragment has huge data, screen seems hanging
         // when switching between navigation menus
@@ -581,79 +573,81 @@ public class MainActivity extends FeatureActivity
 //        if (mPendingRunnable != null) {
 //            mHandler.post(mPendingRunnable);
 //        }
-
-
-        mThread = new Thread(() -> {
+        mThread = Thread(Runnable {
             try {
-                TimeUnit.MILLISECONDS.sleep(400);
-                mHandler.post(() -> {
-                    replaceFragmentWithPopBackStack(currentTag);
-                });
+                TimeUnit.MILLISECONDS.sleep(400)
+                mHandler!!.post(Runnable {
+                    replaceFragmentWithPopBackStack(currentTag)
+                })
                 //mThread.interrupt();
-            } catch (InterruptedException e) {
+            } catch (e: InterruptedException) {
 //                Toast.makeText(this, e.getLocalizedMessage()
 //                        + " - " + mThread.getName(), Toast.LENGTH_SHORT).show();
             }
-        }, "my-threader");
+        }, "my-threader")
 
 
-        if (!mThread.isAlive()) {
+        if (!mThread!!.isAlive()) {
             try {
-                mThread.start();
-            } catch (Exception r) {
-                handleException(r);
+                mThread!!.start()
+            } catch (r: Exception) {
+                handleException(r)
             }
         }
     }
 
-    public void replaceFragmentWithPopBackStack(String fragmentTag) {
+    fun replaceFragmentWithPopBackStack(fragmentTag: String) {
         //Clear back stack
         //final int count = fm.getBackStackEntryCount();
-        FragmentManager fm = getSupportFragmentManager();
+        val fm = getSupportFragmentManager()
         if (!fm.isStateSaved()) {
             if (fragmentTag.contains(TypeNavItem.TAG_SHOW_AUTHOR)) {
                 //not popup + AppNavigator.TAG_DIVIDER
             } else {
                 try {
-                    fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE);
-                } catch (IllegalStateException e) {
-                    DLog.d("{e}{1}");
+                    fm.popBackStack(null, FragmentManager.POP_BACK_STACK_INCLUSIVE)
+                } catch (e: IllegalStateException) {
+                    d("{e}{1}")
                 }
             }
 
             // update the main content by replacing fragments
-            Fragment fragment = getHomeFragment(fragmentTag);
-            FragmentTransaction ft = fm.beginTransaction();
+            val fragment = getHomeFragment(fragmentTag)
+            val ft = fm.beginTransaction()
+
+
             //ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
-
-
             if (fragmentTag.contains(TypeNavItem.TAG_SHOW_AUTHOR)) {
-                ft.addToBackStack(fragmentTag);
+                ft.addToBackStack(fragmentTag)
                 //ft.replace(R.id.container, fragment);
-                ft.replace(binding.frameContainer.getId(), fragment, fragmentTag);//set this fragment in stack
+                ft.replace(
+                    binding!!.frameContainer.getId(),
+                    fragment,
+                    fragmentTag
+                ) //set this fragment in stack
                 //@@ft.replace(R.id.container, fragment, null);
             } else {
-                ft.addToBackStack(null);
-                ft.replace(binding.frameContainer.getId(), fragment, null);
+                ft.addToBackStack(null)
+                ft.replace(binding!!.frameContainer.getId(), fragment, null)
             }
 
-//                    ft.commitAllowingStateLoss();
+
+            //                    ft.commitAllowingStateLoss();
 
 
 //                    ft.setCustomAnimations(android.R.anim.fade_in, android.R.anim.fade_out);
 //                    ft.replace(R.@@@@@@@@@@@@@@@@@, fragment);
 //                    ft.addToBackStack(null);
             try {
-                ft.commit();
-            } catch (java.lang.IllegalStateException e) {
-                DLog.d("{e}{2}");
+                ft.commit()
+            } catch (e: IllegalStateException) {
+                d("{e}{2}")
             }
         }
     }
 
-    private Fragment getHomeFragment(String currentTag) {
-
-//            case TAG_SETTINGS:
+    private fun getHomeFragment(currentTag: String): Fragment {
+        //            case TAG_SETTINGS:
 //                // settings fragment
 //                return KeywordListFragment.newInstance(R.string.app_name);
 
@@ -675,80 +669,79 @@ public class MainActivity extends FeatureActivity
 //                settingsFragment = new UserFragment();
 //                return settingsFragment;
 
-        if (TypeNavItem.TAG_SHOW_FAVORITE_STATUSES.equals(currentTag)) {
-            return MainFragment.newInstance(getString(R.string.menu_favorite_stickers));
-        } else if (TypeNavItem.TAG_SHOW_RANDOM_STATUSES.equals(currentTag)) {
-            return new RandomFragment();
+        if (TypeNavItem.TAG_SHOW_FAVORITE_STATUSES == currentTag) {
+            return MainFragment.newInstance(getString(R.string.menu_favorite_stickers))
+        } else if (TypeNavItem.TAG_SHOW_RANDOM_STATUSES == currentTag) {
+            return RandomFragment()
         } else if (currentTag.startsWith(TypeNavItem.__TAG_CATEGORY_LIST)) {
-            String o = currentTag.split(DIVIDER)[1];
+            val o = currentTag.split(Pagin.DIVIDER.toRegex()).dropLastWhile { it.isEmpty() }
+                .toTypedArray()[1]
             try {
-                int num = Integer.parseInt(o);
-                return BaseDBFragment.newInstance(
-                        //num,
-                        getString(utils.titleV(num)));
-            } catch (Exception e) {
-                handleException(e);
-                return new MainFragment();
+                val num = o.toInt()
+                return BaseDBFragment.newInstance( //num,
+                    getString(utils!!.titleV(num))
+                )
+            } catch (e: Exception) {
+                handleException(e)
+                return MainFragment()
             }
+        } else {
+            return MainFragment()
         }
-
-        //R.id.action_all
-
-        else {
-            return new MainFragment();
-        }
-//                return BaseDBFragment.newInstance(
+        //                return BaseDBFragment.newInstance(
 //                        //Constants.D_ALL,
 //                        getString(R.string.dictionary_all));
     }
 
 
-//    @Override
-//    public void onResume() {
-//        super.onResume();
-//        mBind.adView.resume();
-//    }
-
-//    @Override
-//    public void onPause() {
-//        mBind.adView.pause();
-//        super.onPause();
-//    }
-
-    @Override
-    public void onDestroy() {
+    //    @Override
+    //    public void onResume() {
+    //        super.onResume();
+    //        mBind.adView.resume();
+    //    }
+    //    @Override
+    //    public void onPause() {
+    //        mBind.adView.pause();
+    //        super.onPause();
+    //    }
+    public override fun onDestroy() {
 //        mBind.adView.destroy();
-        dismissProgressDialog();
-        super.onDestroy();
+        dismissProgressDialog()
+        super.onDestroy()
     }
 
-    @Override
-    public void rewardExplode() {
-        explode();
+    override fun rewardExplode() {
+        explode()
     }
 
 
-    public void explode() {
-        EmitterConfig emitterConfig = new Emitter(100L, TimeUnit.MILLISECONDS)
-                .max(100);
-        binding.konfettiView.setOnParticleSystemUpdateListener(new OnParticleSystemUpdateListener() {
-            @Override
-            public void onParticleSystemStarted(@NonNull KonfettiView konfettiView, @NonNull Party party, int i) {
+    fun explode() {
+        val emitterConfig = Emitter(100L, TimeUnit.MILLISECONDS)
+            .max(100)
+        binding!!.konfettiView.onParticleSystemUpdateListener =
+            object : OnParticleSystemUpdateListener {
+                override fun onParticleSystemStarted(
+                    konfettiView: KonfettiView,
+                    party: Party,
+                    i: Int
+                ) {
+                }
 
+                override fun onParticleSystemEnded(
+                    konfettiView: KonfettiView,
+                    party: Party,
+                    i: Int
+                ) {
+                }
             }
-
-            @Override
-            public void onParticleSystemEnded(@NonNull KonfettiView konfettiView, @NonNull Party party, int i) {
-
-            }
-        });
-        binding.konfettiView.start(
-                new PartyFactory(emitterConfig)
-                        .spread(360)
-                        .shapes(Arrays.asList(Shape.Square.INSTANCE, Shape.Circle.INSTANCE, drawableShape))
-                        .colors(Arrays.asList(0xfce18a, 0xff726d, 0xf4306d, 0xb48def))
-                        .setSpeedBetween(0f, 30f)
-                        .position(new Position.Relative(0.5, 0.3))
-                        .build());
+        binding!!.konfettiView.start(
+            PartyFactory(emitterConfig)
+                .spread(360)
+                .shapes(Arrays.asList<Shape?>(Square, Circle, drawableShape))
+                .colors(mutableListOf<Int>(0xfce18a, 0xff726d, 0xf4306d, 0xb48def))
+                .setSpeedBetween(0f, 30f)
+                .position(Relative(0.5, 0.3))
+                .build()
+        )
     }
 }
