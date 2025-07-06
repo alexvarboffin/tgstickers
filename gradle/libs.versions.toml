@@ -2,7 +2,7 @@
 
 android = "3.0.1"
 android-compileSdk = "36"
-android-minSdk = "21"
+android-minSdk = "23"
 android-targetSdk = "36"
 android-buildTools = "36.0.0"
 
@@ -76,7 +76,9 @@ appcompat = "1.7.1"
 material = "1.12.0"
 preferenceKtx = "1.2.1"
 recyclerview = "1.4.0"
+sdpAndroid = "1.1.1"
 socketIo = "0.6.0"
+toasty = "6.1.2"
 tvFoundation = "1.0.0-alpha12"
 tvMaterial = "1.1.0-alpha01"
 ui = "1.8.3"
@@ -209,9 +211,11 @@ precompose-koin = { module = "moe.tlaster:precompose-koin", version.ref = "preco
 precompose-viewmodel = { module = "moe.tlaster:precompose-viewmodel", version.ref = "precompose" }
 review = { module = "com.google.android.play:review", version.ref = "review" }
 review-ktx = { module = "com.google.android.play:review-ktx", version.ref = "review" }
+sdp-android = { module = "com.intuit.sdp:sdp-android", version.ref = "sdpAndroid" }
 socket-io = { module = "dev.icerock.moko:socket-io", version.ref = "socketIo" }
 sqlite = { module = "androidx.sqlite:sqlite", version.ref = "sqlite" }
 sqlite-bundled = { module = "androidx.sqlite:sqlite-bundled", version.ref = "sqlite" }
+toasty = { module = "com.github.alexvarboffin:Toasty", version.ref = "toasty" }
 wheelview = { module = "com.github.ozcanalasalvar.picker:wheelview", version.ref = "wheelview" }
 
 [plugins]
@@ -220,7 +224,7 @@ android-library = { id = "com.android.library", version.ref = "agp" }
 jetbrainsCompose = { id = "org.jetbrains.compose", version.ref = "compose-plugin" }
 compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 kotlinMultiplatform = { id = "org.jetbrains.kotlin.multiplatform", version.ref = "kotlin" }
-kotlin-android = { id = "org.jetbrains.kotlin.android", version.ref = "kotlin" }
+kotlin-android = { id = "org.jetbrains.kotlin.android", version = "2.0.21" }
 
 room = { id = "androidx.room", version.ref = "roomDb" }
 #jetbrains-kotlin-jvm = { id = "org.jetbrains.kotlin.jvm", version.ref = "jetbrainsKotlinJvm" }

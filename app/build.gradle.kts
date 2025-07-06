@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -67,6 +68,9 @@ android {
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
+    }
+    kotlinOptions {
+        jvmTarget = "17"
     }
 }
 
@@ -132,7 +136,8 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
     
     // Third party libraries
-    implementation(libs.mint.android.app)
+    //implementation(libs.mint.android.app)
+    implementation(libs.toasty)
     implementation(libs.lottie)
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(project(":threader"))

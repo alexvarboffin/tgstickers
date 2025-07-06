@@ -1,171 +1,148 @@
-package com.walhalla.telegramstickers.activity;
+package com.walhalla.telegramstickers.activity
 
-import android.annotation.SuppressLint;
-import android.os.Build;
-import android.os.Bundle;
-import android.os.PowerManager;
+import com.walhalla.domain.interactors.impl.AdvertInteractorImpl
+import com.walhalla.domain.repository.AdvertRepository
 
-import android.view.Gravity;
-import android.view.View;
-import android.view.ViewGroup;
-import android.view.ViewTreeObserver;
-import android.view.WindowManager;
-import android.widget.FrameLayout;
+abstract class FeatureActivity : androidx.appcompat.app.AppCompatActivity() {
+    private var wakeLock: android.os.PowerManager.WakeLock? = null
 
-import androidx.appcompat.app.AppCompatActivity;
-
-import com.walhalla.boilerplate.domain.executor.impl.ThreadExecutor;
-import com.walhalla.boilerplate.threading.MainThreadImpl;
-import com.walhalla.domain.interactors.AdvertInteractor;
-import com.walhalla.domain.interactors.impl.AdvertInteractorImpl;
-import com.walhalla.domain.repository.AdvertRepository;
-
-import com.walhalla.library.activity.GDPR;
-import com.walhalla.telegramstickers.TApp;
-import com.walhalla.ui.DLog;
-
-public abstract class FeatureActivity extends AppCompatActivity {
-    private PowerManager.WakeLock wakeLock;
-
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        PowerManager powerManager = (PowerManager) getSystemService(POWER_SERVICE);
+    override fun onCreate(savedInstanceState: android.os.Bundle?) {
+        super.onCreate(savedInstanceState)
+        val powerManager =
+            getSystemService(android.content.Context.POWER_SERVICE) as android.os.PowerManager
         // Создаем WakeLock, чтобы предотвратить выключение экрана
-        wakeLock = powerManager.newWakeLock(PowerManager.SCREEN_BRIGHT_WAKE_LOCK | PowerManager.ACQUIRE_CAUSES_WAKEUP, "YourApp:WakeLockTag");
+        wakeLock = powerManager.newWakeLock(
+            android.os.PowerManager.SCREEN_BRIGHT_WAKE_LOCK or android.os.PowerManager.ACQUIRE_CAUSES_WAKEUP,
+            "YourApp:WakeLockTag"
+        )
         // Устанавливаем флаг FLAG_KEEP_SCREEN_ON в окне активности
-        getWindow().addFlags(WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+        getWindow().addFlags(android.view.WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON)
     }
 
 
-    protected AdvertRepository loadRepository() {
-        return TApp.repository;
+    protected fun loadRepository(): AdvertRepository? {
+        return com.walhalla.telegramstickers.TApp.repository
     }
 
-//    @Override
-//    public boolean onCreateOptionsMenu(Menu menu) {
-//        getMenuInflater().inflate(R.menu.main, menu);
-//        return true;
-//    }
-
-//    @SuppressLint("NonConstantResourceId")
-//    @Override
-//    public boolean onOptionsItemSelected(MenuItem item) {
-//        switch (item.getItemId()) {
-//
-////            case R.string.start_test_again:
-////                return false;
-//
-//            case R.id.action_about:
-//                //Module_U.aboutDialog(this);
-////                startActivity(new Intent(getApplicationContext(), ActivityAbout.class));
-////                overridePendingTransition(R.anim.open_next, R.anim.close_main);
-//                return true;
-//
-//            case R.id.action_privacy_policy:
-//                Module_U.openBrowser(this, ...);
-//                return true;
-//
-//            case R.id.action_rate_app:
-//                Module_U.rateUs(this);
-//                return true;
-//
-//            case R.id.action_share_app:
-//                Module_U.shareThisApp(this);
-//                return true;
-//
-////            case R.id.action_discover_more_app:
-////                Module_U.moreApp(this);
-////                return true;
-//
-////            case R.id.action_exit:
-////                this.finish();
-////                return true;
-//
-//            case R.id.action_feedback:
-//                Module_U.feedback(this);
-//                return true;
-//
-//            default:
-//                return super.onOptionsItemSelected(item);
-//        }
-//
-//
-//        //action_how_to_use_app
-//        //action_support_developer
-//
-//        //return super.onOptionsItemSelected(item);
-//    }
-
-    @SuppressLint("WakelockTimeout")
-    @Override
-    protected void onResume() {
-        super.onResume();
-        wakeLock.acquire();// Включаем WakeLock
+    //    @Override
+    //    public boolean onCreateOptionsMenu(Menu menu) {
+    //        getMenuInflater().inflate(R.menu.main, menu);
+    //        return true;
+    //    }
+    //    @SuppressLint("NonConstantResourceId")
+    //    @Override
+    //    public boolean onOptionsItemSelected(MenuItem item) {
+    //        switch (item.getItemId()) {
+    //
+    /**/            case R.string.start_test_again:
+    * /                return false; */
+    //
+    //            case R.id.action_about:
+    //                //Module_U.aboutDialog(this);
+    /**/                startActivity(new Intent(getApplicationContext(), ActivityAbout.
+    class));
+    * /                overridePendingTransition(R.anim.open_next, R.anim.close_main); */
+    //                return true;
+    //
+    //            case R.id.action_privacy_policy:
+    //                Module_U.openBrowser(this, ...);
+    //                return true;
+    //
+    //            case R.id.action_rate_app:
+    //                Module_U.rateUs(this);
+    //                return true;
+    //
+    //            case R.id.action_share_app:
+    //                Module_U.shareThisApp(this);
+    //                return true;
+    //
+    /**/            case R.id.action_discover_more_app:
+    * /                Module_U.moreApp(this);
+    * /                return true; */
+    //
+    /**/            case R.id.action_exit:
+    * /                this.finish();
+    * /                return true; */
+    //
+    //            case R.id.action_feedback:
+    //                Module_U.feedback(this);
+    //                return true;
+    //
+    //            default:
+    //                return super.onOptionsItemSelected(item);
+    //        }
+    //
+    //
+    //        //action_how_to_use_app
+    //        //action_support_developer
+    //
+    //        //return super.onOptionsItemSelected(item);
+    //    }
+    @android.annotation.SuppressLint("WakelockTimeout")
+    override fun onResume() {
+        super.onResume()
+        wakeLock!!.acquire() // Включаем WakeLock
     }
 
-    @Override
-    protected void onPause() {
-        super.onPause();
-        wakeLock.release();// Отключаем WakeLock при приостановке активности
+    override fun onPause() {
+        super.onPause()
+        wakeLock!!.release() // Отключаем WakeLock при приостановке активности
     }
 
 
     //base
-    protected final long start_time = System.currentTimeMillis();
-    private FrameLayout content;
+    protected val start_time: kotlin.Long = java.lang.System.currentTimeMillis()
+    private val content: android.widget.FrameLayout? = null
 
-    private final AdvertInteractor.Callback<View> callback = new AdvertInteractor.Callback<>() {
-        @Override
-        public void onMessageRetrieved(int id, View message) {
-            DLog.d(message.getClass().getName() + " --> " + message.hashCode());
+    private val callback: com.walhalla.domain.interactors.AdvertInteractor.Callback<android.view.View?> =
+        object : com.walhalla.domain.interactors.AdvertInteractor.Callback<android.view.View?> {
+            override fun onMessageRetrieved(id: kotlin.Int, message: android.view.View) {
+                DLog.d(message.javaClass.getName() + " --> " + message.hashCode())
 
-            if (content != null) {
-                DLog.d("@@@@@@@@@@" + content.getClass().getName());
-                try {
-                    //content.removeView(message);
-                    if (message.getParent() != null) {
-                        ((ViewGroup) message.getParent()).removeView(message);
-                    }
-                    FrameLayout.LayoutParams params = new FrameLayout.LayoutParams(FrameLayout.LayoutParams.WRAP_CONTENT, FrameLayout.LayoutParams.WRAP_CONTENT);
-                    params.gravity = Gravity.BOTTOM | Gravity.CENTER;
-                    message.setLayoutParams(params);
-
-                    ViewTreeObserver vto = message.getViewTreeObserver();
-                    vto.addOnGlobalLayoutListener(new ViewTreeObserver.OnGlobalLayoutListener() {
-                        @SuppressLint("ObsoleteSdkInt")
-                        @Override
-                        public void onGlobalLayout() {
-                            if (Build.VERSION.SDK_INT < 16) {
-                                message.getViewTreeObserver().removeGlobalOnLayoutListener(this);
-                            } else {
-                                message.getViewTreeObserver().removeOnGlobalLayoutListener(this);
-                            }
-                            //int width = message.getMeasuredWidth();
-                            //int height = message.getMeasuredHeight();
-                            //DLog.i("@@@@" + height + "x" + width);
-                            //setSpaceForAd(height);
+                if (content != null) {
+                    DLog.d("@@@@@@@@@@" + content.javaClass.getName())
+                    try {
+                        //content.removeView(message);
+                        if (message.getParent() != null) {
+                            (message.getParent() as android.view.ViewGroup).removeView(message)
                         }
-                    });
-                    content.addView(message);
+                        val params = android.widget.FrameLayout.LayoutParams(
+                            android.widget.FrameLayout.LayoutParams.WRAP_CONTENT,
+                            android.widget.FrameLayout.LayoutParams.WRAP_CONTENT
+                        )
+                        params.gravity = android.view.Gravity.BOTTOM or android.view.Gravity.CENTER
+                        message.setLayoutParams(params)
 
-                } catch (Exception e) {
-                    DLog.handleException(e);
+                        val vto = message.getViewTreeObserver()
+                        vto.addOnGlobalLayoutListener(object :
+                            android.view.ViewTreeObserver.OnGlobalLayoutListener {
+                            @android.annotation.SuppressLint("ObsoleteSdkInt")
+                            override fun onGlobalLayout() {
+                                if (android.os.Build.VERSION.SDK_INT < 16) {
+                                    message.getViewTreeObserver().removeGlobalOnLayoutListener(this)
+                                } else {
+                                    message.getViewTreeObserver().removeOnGlobalLayoutListener(this)
+                                }
+                                //int width = message.getMeasuredWidth();
+                                //int height = message.getMeasuredHeight();
+                                //DLog.i("@@@@" + height + "x" + width);
+                                //setSpaceForAd(height);
+                            }
+                        })
+                        content.addView(message)
+                    } catch (e: java.lang.Exception) {
+                        DLog.handleException(e)
+                    }
                 }
+            }
+
+            override fun onRetrievalFailed(error: kotlin.String?) {
+                DLog.d("---->" + error)
             }
         }
 
-        @Override
-        public void onRetrievalFailed(String error) {
-            DLog.d("---->" + error);
-        }
-    };
 
-
-
-
-    protected void setupAdAtBottom(FrameLayout content) {
-
+    protected fun setupAdAtBottom(content: android.widget.FrameLayout?) {
         //FrameLayout content = findViewById(android.R.id.content);
 
 
@@ -199,37 +176,35 @@ public abstract class FeatureActivity extends AppCompatActivity {
 //        addLayoutToContent(linearLayout);
 
 
-        AdvertInteractorImpl interactor = new AdvertInteractorImpl(
-                ThreadExecutor.getInstance(),
-                MainThreadImpl.getInstance(), loadRepository());
+        val interactor: AdvertInteractorImpl = AdvertInteractorImpl(
+            ThreadExecutor.getInstance(),
+            MainThreadImpl.getInstance(), loadRepository()
+        )
         //aa.attach(this);
         //DLog.d("---->" + aa.hashCode());
-        interactor.selectView(content, callback);
-    }
-
-
-
-//    private void setSpaceForAd(int height) {
-//        DLog.d("@@@@@@@@" + height);
-////        FrameLayout content = findViewById(android.R.id.content);
-////        if (content != null) {
-////            View child0 = content.getChildAt(0);
-////            //child0.setPadding(0, 0, 0, 50);
-////
-////            FrameLayout.LayoutParams lp = (android.widget.FrameLayout.LayoutParams) child0.getLayoutParams();
-////            //lp.bottomMargin = height;
-////            child0.setLayoutParams(lp);
-////        }
-//    }
-
-////    AdView adView = new AdView(this);
-////    adView.setAdSize(AdSize.BANNER);
-////    adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111");
-//
-//    private void addLayoutToContent(View ad) {
-//        content.addView(ad);
-//        AdView mAdView = ad.findViewById(R.id.adView);
-//        //mAdView.setAdListener(new AdListener(mAdView));
-//        mAdView.loadAd(new AdRequest.Builder().build());
-//    }
+        interactor.selectView(content, callback)
+    } //    private void setSpaceForAd(int height) {
+    //        DLog.d("@@@@@@@@" + height);
+    /**/        FrameLayout content = findViewById(android.R.id.content);
+    * /        if (content != null)
+    {
+        * /            View child0 = content.getChildAt(0);
+        * /            //child0.setPadding(0, 0, 0, 50);
+        * /
+        * /            FrameLayout.LayoutParams lp = (android.widget.FrameLayout.LayoutParams) child0.getLayoutParams();
+        * /            //lp.bottomMargin = height;
+        * /            child0.setLayoutParams(lp);
+        * /
+    } */
+    //    }
+    /**/    AdView adView = new AdView(this);
+    * /    adView.setAdSize(AdSize.BANNER);
+    * /    adView.setAdUnitId("ca-app-pub-3940256099942544/6300978111"); */
+    //
+    //    private void addLayoutToContent(View ad) {
+    //        content.addView(ad);
+    //        AdView mAdView = ad.findViewById(R.id.adView);
+    //        //mAdView.setAdListener(new AdListener(mAdView));
+    //        mAdView.loadAd(new AdRequest.Builder().build());
+    //    }
 }

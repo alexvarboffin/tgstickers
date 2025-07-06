@@ -5,6 +5,7 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.google.gms.google.services)
     alias(libs.plugins.google.firebase.crashlytics)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -70,6 +71,9 @@ android {
         sourceCompatibility = JavaVersion.VERSION_17
         targetCompatibility = JavaVersion.VERSION_17
     }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
 
 tasks.register<Copy>("copyAabToBuildFolder") {
@@ -134,7 +138,7 @@ dependencies {
     implementation(libs.androidx.lifecycle.process)
 
     // Third party libraries
-    implementation(libs.mint.android.app)
+    //implementation(libs.mint.android.app)
     implementation(libs.lottie)
     implementation(libs.kotlin.stdlib.jdk8)
     implementation(project(":threader"))

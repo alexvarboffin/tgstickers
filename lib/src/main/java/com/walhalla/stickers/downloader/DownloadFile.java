@@ -1,5 +1,8 @@
 package com.walhalla.stickers.downloader;
 
+
+import static com.walhalla.stickers.presenter.StickerInfoPresenter.PermissionResolver.checkExternalStoragePermission;
+
 import android.app.DownloadManager;
 import android.content.Context;
 import android.content.pm.PackageManager;
@@ -32,14 +35,7 @@ public class DownloadFile {
         return instance;
     }
 
-    public static boolean checkExternalStoragePermission(Context context) {
-        int result = ContextCompat.checkSelfPermission(context, android.Manifest.permission.WRITE_EXTERNAL_STORAGE);
-        if (result == PackageManager.PERMISSION_GRANTED) {
-            return true;
-        } else {
-            return false;
-        }
-    }
+
 
     public void makeImageLoad(Context context, final String url, String stickerPackName) {
         if (IOUtils.hasMarsallow()) {

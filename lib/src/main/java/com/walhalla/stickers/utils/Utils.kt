@@ -1,191 +1,189 @@
-package com.walhalla.stickers.utils;
+package com.walhalla.stickers.utils
+
+import com.walhalla.stickers.compat.ComV19
 
 
-import android.content.Context;
-import android.content.SharedPreferences;
-import android.graphics.PorterDuff;
-import android.graphics.drawable.Drawable;
-import android.os.Environment;
-import android.text.TextUtils;
-import android.util.Patterns;
-import android.view.MenuItem;
-import android.webkit.URLUtil;
 
-import androidx.core.content.ContextCompat;
-
-
-import com.walhalla.stickers.R;
-import com.walhalla.stickers.compat.ComV19;
-import com.walhalla.ui.DLog;
-
-import java.io.File;
-import java.net.URL;
-import java.util.Locale;
-import java.util.regex.Pattern;
-
-import es.dmoral.toasty.Toasty;
-
-public class Utils {
+object Utils {
     //private InterstitialAd interstitialAd;
-
-    public static boolean isSameDomain(String url, String url1) {
-        return getRootDomainUrl(url.toLowerCase()).equals(getRootDomainUrl(url1.toLowerCase()));
+    fun isSameDomain(url: String, url1: String): Boolean {
+        return getRootDomainUrl(url.lowercase(java.util.Locale.getDefault())) == com.walhalla.stickers.utils.Utils.getRootDomainUrl(
+            url1.lowercase(java.util.Locale.getDefault())
+        )
     }
 
-    private static String getRootDomainUrl(String url) {
-        String[] domainKeys = url.split("/")[2].split("\\.");
-        int length = domainKeys.length;
-        int dummy = domainKeys[0].equals("www") ? 1 : 0;
-        if (length - dummy == 2)
-            return domainKeys[length - 2] + "." + domainKeys[length - 1];
+    private fun getRootDomainUrl(url: String): String {
+        val domainKeys: kotlin.Array<kotlin.String?> =
+            url.split("/".toRegex()).dropLastWhile { it.isEmpty() }
+                .toTypedArray()[2].split("\\.".toRegex()).dropLastWhile { it.isEmpty() }
+                .toTypedArray()
+        val length = domainKeys.size
+        val dummy = if (domainKeys[0] == "www") 1 else 0
+        if (length - dummy == 2) return domainKeys[length - 2] + "." + domainKeys[length - 1]
         else {
-            if (domainKeys[length - 1].length() == 2) {
-                return domainKeys[length - 3] + "." + domainKeys[length - 2] + "." + domainKeys[length - 1];
+            if (domainKeys[length - 1]!!.length == 2) {
+                return domainKeys[length - 3] + "." + domainKeys[length - 2] + "." + domainKeys[length - 1]
             } else {
-                return domainKeys[length - 2] + "." + domainKeys[length - 1];
+                return domainKeys[length - 2] + "." + domainKeys[length - 1]
             }
         }
     }
 
-    public static void tintMenuIcon(Context context, MenuItem item, int color) {
-        Drawable drawable = item.getIcon();
+    fun tintMenuIcon(
+        context: android.content.Context,
+        item: android.view.MenuItem,
+        color: kotlin.Int
+    ) {
+        val drawable = item.icon
         if (drawable != null) {
             // If we don't mutate the drawable, then all drawable's with this id will have a color
             // filter applied to it.
-            drawable.mutate();
-            drawable.setColorFilter(ContextCompat.getColor(context, color), PorterDuff.Mode.SRC_ATOP);
+            drawable.mutate()
+            drawable.setColorFilter(
+                androidx.core.content.ContextCompat.getColor(context, color),
+                android.graphics.PorterDuff.Mode.SRC_ATOP
+            )
         }
     }
 
-//    public static void bookmarkUrl(Context context, String url) {
-//        SharedPreferences pref = context.getSharedPreferences(PREF_APPNAME, 0); // 0 - for private mode
-//        SharedPreferences.Editor editor = pref.edit();
-//
-//        // if url is already bookmarked, unbookmark it
-//        if (pref.getBoolean(url, false)) {
-//            editor.remove(url).apply();
-//        } else {
-//            editor.putBoolean(url, true);
-//        }
-//        editor.commit();
+    //    public static void bookmarkUrl(Context context, String url) {
+    //        SharedPreferences pref = context.getSharedPreferences(PREF_APPNAME, 0); // 0 - for private mode
+    //        SharedPreferences.Editor editor = pref.edit();
+    //
+    //        // if url is already bookmarked, unbookmark it
+    //        if (pref.getBoolean(url, false)) {
+    //            editor.remove(url).apply();
+    //        } else {
+    //            editor.putBoolean(url, true);
+    //        }
+    //        editor.commit();
+    //    }
+    //    public static boolean isBookmarked(Context context, String url) {
+    //        SharedPreferences pref = context.getSharedPreferences(PREF_APPNAME, 0);
+    //        return pref.getBoolean(url, false);
+    //    }
+//    fun ShowErrorToast0(context: android.content.Context?, err: kotlin.Int) {
+//        val comv19: ComV19 = ComV19()
+//        es.dmoral.toasty.Toasty.custom(
+//            context,
+//            err,
+//            comv19.getDrawable(context, com.walhalla.stickers.R.drawable.ic_cancel),
+//            com.walhalla.stickers.R.color.error,
+//            android.R.color.white, Toasty.LENGTH_SHORT, true, true
+//        ).show()
 //    }
 
-//    public static boolean isBookmarked(Context context, String url) {
-//        SharedPreferences pref = context.getSharedPreferences(PREF_APPNAME, 0);
-//        return pref.getBoolean(url, false);
-//    }
-
-    public static void ShowErrorToast0(Context context, int err) {
-        ComV19 comv19 = new ComV19();
-        Toasty.custom(context,
-                err,
-                comv19.getDrawable(context, R.drawable.ic_cancel),
-                R.color.error,
-                android.R.color.white, Toasty.LENGTH_SHORT, true, true).show();
+    @JvmStatic
+    fun ShowToast0(context: android.content.Context, str: kotlin.String?) {
+//        val comv19: ComV19 = ComV19()
+//        Toasty.custom(
+//            context, str,
+//            comv19.getDrawable(context, com.walhalla.stickers.R.drawable.ic_info),
+//            androidx.core.content.ContextCompat.getColor(
+//                context,
+//                com.walhalla.stickers.R.color.colorPrimaryDark
+//            ),
+//            androidx.core.content.ContextCompat.getColor(context, android.R.color.white),
+//            Toasty.LENGTH_SHORT, true, true
+//        ).show()
     }
 
-    public static void ShowToast0(Context context, String str) {
-        ComV19 comv19 = new ComV19();
-        Toasty.custom(context, str,
-                comv19.getDrawable(context, R.drawable.ic_info),
-                ContextCompat.getColor(context, R.color.colorPrimaryDark),
-                ContextCompat.getColor(context, android.R.color.white),
-                Toasty.LENGTH_SHORT, true, true).show();
+    fun ShowToast0(context: android.content.Context?, res: kotlin.Int) {
+//        val comv19: ComV19 = ComV19()
+//        Toasty.custom(
+//            context, res,
+//            comv19.getDrawable(context, com.walhalla.stickers.R.drawable.ic_info),
+//            com.walhalla.stickers.R.color.colorPrimaryDark,
+//            android.R.color.white,
+//            Toasty.LENGTH_SHORT, true, true
+//        ).show()
     }
 
-    public static void ShowToast0(Context context, int res) {
-        ComV19 comv19 = new ComV19();
-        Toasty.custom(context, res,
-                comv19.getDrawable(context, R.drawable.ic_info),
-                R.color.colorPrimaryDark,
-                android.R.color.white,
-                Toasty.LENGTH_SHORT, true, true).show();
-    }
-
-    public static boolean isValidUrl(CharSequence input) {
-        if (TextUtils.isEmpty(input)) {
-            return false;
+    fun isValidUrl(input: kotlin.CharSequence?): kotlin.Boolean {
+        if (android.text.TextUtils.isEmpty(input)) {
+            return false
         }
-        Pattern URL_PATTERN = Patterns.WEB_URL;
-        boolean matches = URL_PATTERN.matcher(input).matches();
+        val URL_PATTERN = android.util.Patterns.WEB_URL
+        var matches = URL_PATTERN.matcher(input).matches()
         if (!matches) {
-            String urlString = input + "";
-            if (URLUtil.isNetworkUrl(urlString)) {
+            val urlString = input.toString() + ""
+            if (android.webkit.URLUtil.isNetworkUrl(urlString)) {
                 try {
-                    new URL(urlString);
-                    matches = true;
-                } catch (Exception e) {
-                    DLog.handleException(e);
+                    java.net.URL(urlString)
+                    matches = true
+                } catch (e: java.lang.Exception) {
+                    com.walhalla.ui.DLog.handleException(e)
                 }
             }
         }
-        return matches;
+        return matches
     }
 
 
-//   public static void GetSessionID(final Context cntx){
-//       final String[] ID = new String[1];
-//
-//       AsyncTask.execute(new Runnable() {
-//           @Override
-//           public void run() {
-//
-//               try {
-//                   Document doc = Jsoup.connect(API_URL2).post();
-//
-//                   Elements scriptElements = doc.getElementsByTag("script");
-//                   for (Element element : scriptElements) {
-//                       if (element.data().contains("sid")) {
-//                            // find the line which contains 'infosite.token = <...>;'
-//                           Pattern pattern = Pattern.compile("(?is)sid=\'(.+?)\'");
-//                           Matcher matcher = pattern.matcher(element.data());
-//                           // we only expect a single match here so there's no need to loop through the matcher's groups
-//                           if (matcher.find()) {
-//                               //System.out.println(matcher.group());
-//                               //System.out.println(matcher.group(1));
-//                               ID[0] = matcher.group(1).toString();
-//                           } else {
-//                               System.err.println("No match found!");
-//                           }
-//                           break;
-//                       }
-//                   }
-//               } catch (IOException e) {
-//                   DLog.handleException(e);
-//               }
-//
-//
-//               Session session;
-//               session = new Session(cntx);
-//               session.setSid(ID[0]);
-//                   }
-//
-//
-//       });
-//
-//
-//
-//
-//    //    return ID[0];
-//   }
-
-    public static String getRootDirPath(Context context) {
-        if (Environment.MEDIA_MOUNTED.equals(Environment.getExternalStorageState())) {
-            File file = ContextCompat.getExternalFilesDirs(context.getApplicationContext(),
-                    null)[0];
-            return file.getAbsolutePath();
+    //   public static void GetSessionID(final Context cntx){
+    //       final String[] ID = new String[1];
+    //
+    //       AsyncTask.execute(new Runnable() {
+    //           @Override
+    //           public void run() {
+    //
+    //               try {
+    //                   Document doc = Jsoup.connect(API_URL2).post();
+    //
+    //                   Elements scriptElements = doc.getElementsByTag("script");
+    //                   for (Element element : scriptElements) {
+    //                       if (element.data().contains("sid")) {
+    //                            // find the line which contains 'infosite.token = <...>;'
+    //                           Pattern pattern = Pattern.compile("(?is)sid=\'(.+?)\'");
+    //                           Matcher matcher = pattern.matcher(element.data());
+    //                           // we only expect a single match here so there's no need to loop through the matcher's groups
+    //                           if (matcher.find()) {
+    //                               //System.out.println(matcher.group());
+    //                               //System.out.println(matcher.group(1));
+    //                               ID[0] = matcher.group(1).toString();
+    //                           } else {
+    //                               System.err.println("No match found!");
+    //                           }
+    //                           break;
+    //                       }
+    //                   }
+    //               } catch (IOException e) {
+    //                   DLog.handleException(e);
+    //               }
+    //
+    //
+    //               Session session;
+    //               session = new Session(cntx);
+    //               session.setSid(ID[0]);
+    //                   }
+    //
+    //
+    //       });
+    //
+    //
+    //
+    //
+    //    //    return ID[0];
+    //   }
+    fun getRootDirPath(context: android.content.Context): kotlin.String {
+        if (android.os.Environment.MEDIA_MOUNTED == android.os.Environment.getExternalStorageState()) {
+            val file = androidx.core.content.ContextCompat.getExternalFilesDirs(
+                context.applicationContext,
+                null
+            )[0]
+            return file.absolutePath
         } else {
-            return context.getApplicationContext().getFilesDir().getAbsolutePath();
+            return context.applicationContext.filesDir.absolutePath
         }
     }
 
-    public static String getProgressDisplayLine(long currentBytes, long totalBytes) {
-        return getBytesToMBString(currentBytes) + "/" + getBytesToMBString(totalBytes);
+    fun getProgressDisplayLine(currentBytes: kotlin.Long, totalBytes: kotlin.Long): kotlin.String {
+        return getBytesToMBString(currentBytes) + "/" + getBytesToMBString(
+            totalBytes
+        )
     }
 
-    private static String getBytesToMBString(long bytes) {
-        return String.format(Locale.ENGLISH, "%.2fMb", bytes / (1024.00 * 1024.00));
+    private fun getBytesToMBString(bytes: kotlin.Long): kotlin.String {
+        return String.format(java.util.Locale.ENGLISH, "%.2fMb", bytes / (1024.00 * 1024.00))
     }
-
-
 }

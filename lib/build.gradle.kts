@@ -2,6 +2,7 @@ import java.io.File
 
 plugins {
     alias(libs.plugins.android.library)
+    alias(libs.plugins.kotlin.android)
 }
 
 android {
@@ -33,6 +34,9 @@ android {
         buildConfig = true
         viewBinding = true
     }
+    kotlinOptions {
+        jvmTarget = "17"
+    }
 }
 
 dependencies {
@@ -44,6 +48,7 @@ dependencies {
     implementation(project(":features:permissionResolver"))
     implementation(project(":features:wads"))
     implementation(project(":features:ui"))
+    implementation(libs.androidx.core.ktx)
 
     // Testing
     testImplementation(libs.junit)
@@ -51,27 +56,28 @@ dependencies {
     androidTestImplementation(libs.androidx.espresso.core)
 
     // Third party libraries
-    implementation("com.github.alexvarboffin:mint-android-app:1.5.2")
+    //implementation("com.github.alexvarboffin:mint-android-app:1.5.2")
+    api(libs.toasty)
 
     // Room
     implementation(libs.androidx.room.runtime)
     annotationProcessor(libs.androidx.room.compiler)
 
     // OkHttp
-    implementation("com.squareup.okhttp3:okhttp:3.12.12")
-    implementation("com.squareup.okhttp3:logging-interceptor:3.12.12")
+    implementation(libs.okhttp)
+    implementation(libs.logging.interceptor)
     
     // Preference (заменен на preference-ktx)
     implementation(libs.androidx.preference.ktx)
     
     // QR Code
-    implementation("com.github.kenglxn.QRGen:android:3.0.1")
+    implementation(libs.android)
     
     // Glide
-    implementation("com.github.bumptech.glide:glide:4.16.0")
-    annotationProcessor("com.github.bumptech.glide:compiler:4.16.0")
+    implementation(libs.glide)
+    annotationProcessor(libs.compiler)
 
     // UI Libraries
-    implementation("com.intuit.sdp:sdp-android:1.1.1")
-    implementation("nl.dionsegijn:konfetti-xml:2.0.4")
+    implementation(libs.sdp.android)
+    implementation(libs.konfetti.xml)
 }

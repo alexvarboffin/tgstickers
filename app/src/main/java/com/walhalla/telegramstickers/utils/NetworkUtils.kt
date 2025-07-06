@@ -1,11 +1,11 @@
-package com.walhalla.telegramstickers.utils;
+package com.walhalla.telegramstickers.utils
 
-import android.content.Context;
-import android.net.ConnectivityManager;
+import android.content.Context
+import android.net.ConnectivityManager
 
-public class NetworkUtils {
-
-    public static boolean isNetworkConnected(Context context) {
-        return ((ConnectivityManager) context.getSystemService(Context.CONNECTIVITY_SERVICE)).getActiveNetworkInfo() != null;
+object NetworkUtils {
+    @JvmStatic
+    fun isNetworkConnected(context: Context): Boolean {
+        return (context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager).getActiveNetworkInfo() != null
     }
 }

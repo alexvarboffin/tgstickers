@@ -3,7 +3,6 @@
   <component name="VcsDirectoryMappings">
     <mapping directory="C:/src/Synced/WalhallaUI" vcs="Git" />
     <mapping directory="$PROJECT_DIR$/../sdk/android/multithreader" vcs="Git" />
-    <mapping directory="$PROJECT_DIR$/../sdk/android/ui" vcs="Git" />
     <mapping directory="$PROJECT_DIR$" vcs="Git" />
   </component>
 </project>
