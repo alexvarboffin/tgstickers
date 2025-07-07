@@ -33,18 +33,18 @@ class BaseDBFragment : Fragment(), ItemClickListener {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        m = KSUtil.getInstance(getActivity())
+        m = KSUtil.getInstance(activity)
         if (arguments != null) {
             val0 = requireArguments().getString(KEY_BUNDLE_0)
-            val a = getActivity() as AppCompatActivity?
+            val a = activity as AppCompatActivity?
             if (a != null) {
-                val r = a.getSupportActionBar()
+                val r = a.supportActionBar
                 if (r != null) {
-                    r.setSubtitle(val0)
+                    r.subtitle = val0
                 }
             }
         }
-        db = LocalDatabaseRepo.getDatabase(getActivity())
+        db = LocalDatabaseRepo.getDatabase(activity)
         adapter = StickerAdapter(context, m!!.blockedItems, db!!.stickerDao(), false)
     }
 
