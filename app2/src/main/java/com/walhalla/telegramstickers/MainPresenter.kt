@@ -1,210 +1,261 @@
-package com.walhalla.telegramstickers;
+package com.walhalla.telegramstickers
 
-import android.content.Context;
+import android.content.Context
+import android.os.Handler
+import androidx.appcompat.app.AlertDialog
+import com.telegramstickers.catalogue.R
+import com.telegramstickers.catalogue.activity.main.MainActivity
+import com.walhalla.stickers.FirebaseKeys
+import com.walhalla.stickers.constants.Constants
+import com.walhalla.stickers.database.LocalDatabaseRepo
+import com.walhalla.stickers.database.StickerDb
+import com.walhalla.stickers.network.JSONParser
+import com.walhalla.stickers.presenter.StickersPresenter
+import com.walhalla.stickers.utils.NetworkUtils.isNetworkConnected
+import com.walhalla.ui.DLog.d
+import com.walhalla.ui.DLog.handleException
+import org.json.JSONObject
+import java.util.Locale
+import java.util.concurrent.ExecutorService
+import java.util.concurrent.Executors
+import androidx.core.content.edit
 
-import android.os.Handler;
-
-import androidx.appcompat.app.AlertDialog;
-
-import com.telegramstickers.catalogue.R;
-import com.walhalla.stickers.AppDatabase;
-import com.walhalla.stickers.constants.Constants;
-import com.walhalla.stickers.FirebaseKeys;
-import com.walhalla.stickers.database.LocalDatabaseRepo;
-import com.walhalla.stickers.database.StickerDb;
-import com.telegramstickers.catalogue.activity.main.MainActivity;
-import com.walhalla.stickers.network.JSONParser;
-import com.walhalla.stickers.presenter.StickersPresenter;
-import com.walhalla.telegramstickers.utils.NetworkUtils;
-import com.walhalla.ui.DLog;
-
-import org.json.JSONArray;
-import org.json.JSONObject;
-
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-
-public class MainPresenter extends StickersPresenter {
-
-    
-
-
-
-    // https://tgstickerscatalogue-default-rtdb.firebaseio.com/.json
-    public static char[] v0 = new char[]{110, 111, 115, 106, 46, 47, 109, 111, 99, 46, 111, 105, 101, 115, 97, 98, 101, 114, 105, 102, 46, 98, 100, 116, 114, 45, 116, 108, 117, 97, 102, 101, 100, 45, 101, 117, 103, 111, 108, 97, 116, 97, 99, 115, 114, 101, 107, 99, 105, 116, 115, 103, 116, 47, 47, 58, 115, 112, 116, 116, 104};
-
-    private String dec0(char[] v) {
-        return new StringBuilder((String.valueOf(v))).reverse().toString();
+class MainPresenter(private val context: Context, handler: Handler, activity: MainActivity?) :
+    StickersPresenter(
+        context
+    ) {
+    private fun dec0(v: CharArray?): String {
+        return StringBuilder((String(v!!))).reverse().toString()
     }
 
-    public static final String PREF_NAME = "Settings";
+    val url_all_stickers: String
+    private val mView: MainActivity?
+    val executor: ExecutorService = Executors.newSingleThreadExecutor()
+    private val handler: Handler
 
 
-    private final Context context;
-
-    public final String url_all_stickers;
-    private final MainActivity mView;
-    final ExecutorService executor = Executors.newSingleThreadExecutor();
-    private final Handler handler;
-
-
-    public MainPresenter(Context context, Handler handler, MainActivity activity) {
-        super(context);
-        this.context = context;
-        this.url_all_stickers = dec0(v0);
-        this.mView = activity;
-        this.handler = handler;
+    init {
+        this.url_all_stickers = "https://islamicwallpapers-1c667.web.app/json.json"//dec0(v0)
+        this.mView = activity
+        this.handler = handler
     }
 
-    public boolean isRunning() {
-        return !executor.isShutdown();// Проверяем, работает ли ExecutorService
+    val isRunning: Boolean
+        get() = !executor.isShutdown // Проверяем, работает ли ExecutorService
+
+    fun stop() {
+        executor.shutdown() // Останавливаем ExecutorService
     }
 
-    public void stop() {
-        executor.shutdown();// Останавливаем ExecutorService
-    }
-
-    public void execute() {
-        if (!isRunning()) {
-
+    fun execute() {
+        if (!this.isRunning) {
         }
-        DLog.d("@@@@" + isRunning());
+        d("@@@@" + this.isRunning)
 
-        executor.execute(() -> {
-            int totalStickersLength = 0;
-            List<StickerDb> stickersArray = new ArrayList<>();
-            JSONParser jParser = new JSONParser();
-            JSONObject makeHttpRequest = jParser.makeHttpRequest(url_all_stickers, "GET", new HashMap<>());
+        executor.execute(Runnable {
+            var totalStickersLength = 0
+            val stickersArray: MutableList<StickerDb?> = ArrayList<StickerDb?>()
+            val jParser = JSONParser()
+            val makeHttpRequest =
+                jParser.makeHttpRequest(url_all_stickers, "GET", HashMap<Any?, Any?>())
             if (makeHttpRequest == null) {
                 //DLog.d("All Stickers: @@@@@@");
-                onPostExecute(stickersArray, totalStickersLength);
-                return;
+                onPostExecute(stickersArray, totalStickersLength)
+                return@Runnable
             }
             try {
                 if (isValid(makeHttpRequest)) {
-                    JSONArray stickers = makeHttpRequest.getJSONArray("stickers");
-                    totalStickersLength = stickers.length();
-                    for (int i = 0; i < totalStickersLength; i++) {
-                        JSONObject object = stickers.getJSONObject(i);
+                    val stickers = makeHttpRequest.getJSONArray("stickers")
+                    totalStickersLength = stickers.length()
+                    for (i in 0..<totalStickersLength) {
+                        val `object` = stickers.getJSONObject(i)
 
-                        String author = "";
-                        String imageset = "";
-                        String link = "";
-                        String created_at = "";
+                        var author = ""
+                        var imageset = ""
+                        var link = ""
+                        var created_at = ""
                         try {
-                            author = object.getString("author");
-                        } catch (Exception ignored) {
-                        }
-
-                        try {
-                            link = object.getString("link");
-                        } catch (Exception ignored) {
+                            author = `object`.getString("author")
+                        } catch (ignored: Exception) {
                         }
 
-                        int count = 0;
-                        if (object.has("count")) {
-                            count = object.getInt("count");
+                        try {
+                            link = `object`.getString("link")
+                        } catch (ignored: Exception) {
                         }
-                        int storage = 0;
-                        if (object.has("storage")) {
-                            storage = object.getInt("storage");
+
+                        var count = 0
+                        if (`object`.has("count")) {
+                            count = `object`.getInt("count")
                         }
-                        String categoryName = "";
-                        String tmp = dec0(FirebaseKeys.KEY_CATEGORY);
-                        if (object.has(tmp)) {
-                            categoryName = object.getString(tmp).toLowerCase();
+                        var storage = 0
+                        if (`object`.has("storage")) {
+                            storage = `object`.getInt("storage")
+                        }
+                        var categoryName = ""
+                        val tmp = dec0(FirebaseKeys.KEY_CATEGORY)
+                        if (`object`.has(tmp)) {
+                            categoryName = `object`.getString(tmp).lowercase(Locale.getDefault())
                         }
                         try {
-                            if (object.has(Constants.KEY_IMAGESET)) {
-                                imageset = object.getString(Constants.KEY_IMAGESET);
+                            if (`object`.has(Constants.KEY_IMAGESET)) {
+                                imageset = `object`.getString(Constants.KEY_IMAGESET)
                             } else {
-                                imageset = link;
+                                imageset = link
                             }
-                        } catch (Exception ignored) {
-                            imageset = link;
+                        } catch (ignored: Exception) {
+                            imageset = link
                         }
                         try {
-                            created_at = object.getString(Constants.TAG_CREATED_AT);
-                        } catch (Exception ignored) {
+                            created_at = `object`.getString(Constants.TAG_CREATED_AT)
+                        } catch (ignored: Exception) {
                         }
                         stickersArray.add(
-                                new StickerDb(
-                                        i + 1,
-                                        //object.getInt(Constants.TAG_PID),
-                                        object.getString("name"),
-                                        author,
-                                        imageset,
-                                        count,
-                                        categoryName,
-                                        link,
-                                        created_at, storage)
-                        );
+                            StickerDb(
+                                i + 1,  //object.getInt(Constants.TAG_PID),
+                                `object`.getString("name"),
+                                author,
+                                imageset,
+                                count,
+                                categoryName,
+                                link,
+                                created_at, storage
+                            )
+                        )
                     }
                 }
-            } catch (Exception e) {
-                DLog.handleException(e);
+            } catch (e: Exception) {
+                handleException(e)
             }
-            onPostExecute(stickersArray, totalStickersLength);
-        });
+            onPostExecute(stickersArray, totalStickersLength)
+        })
     }
 
 
-    private void onPostExecute(final List<StickerDb> arrayList, int totalStickersLength) {
-        sharedPreferences.edit().putLong(KEY_DATE, (System.currentTimeMillis() / 1000) + ONE_HOUR).apply();
+    private fun onPostExecute(arrayList: MutableList<StickerDb?>, totalStickersLength: Int) {
+        sharedPreferences.edit {
+            putLong(KEY_DATE, (System.currentTimeMillis() / 1000) + ONE_HOUR)
+        }
         if (mView != null) {
-            handler.post(() -> {
+            handler.post(Runnable {
                 if (!arrayList.isEmpty()) {
-                    AppDatabase db = LocalDatabaseRepo.getDatabase(context);
-                    db.stickerDao().deleteAllStickers();
-                    int total = arrayList.size();
-                    for (int i = 0; i < total; i++) {
-                        StickerDb item = arrayList.get(i);
+                    val db = LocalDatabaseRepo.getDatabase(context)
+                    db.stickerDao().deleteAllStickers()
+                    val total = arrayList.size
+                    for (i in 0..<total) {
+                        val item = arrayList.get(i)
                         //if (!db.checkSticker(item.name)) {
-                        db.stickerDao().insertSticker(item);
+                        db.stickerDao().insertSticker(item)
                         //}
                     }
                     //db--close();
                     //DLog.d("[@@ isValidData @@]" + (total == totalStickersLength));
                     if (total == totalStickersLength && totalStickersLength > 0) {
-                        sharedPreferences.edit().putBoolean(KEY_VALID_DATA, true).apply();
+                        sharedPreferences.edit { putBoolean(KEY_VALID_DATA, true) }
                     }
                 }
-                mView.successResult00(arrayList);
-            });
+                mView.successResult00(arrayList)
+            })
         }
     }
 
-    private boolean isValid(JSONObject makeHttpRequest) throws Exception {
+    @Throws(Exception::class)
+    private fun isValid(makeHttpRequest: JSONObject?): Boolean {
         //return makeHttpRequest.getInt("success") == 1;
-        return true;
+        return true
     }
 
-    public void onCreateEvent() {
-        AppDatabase db = LocalDatabaseRepo.getDatabase(context);
-        List<StickerDb> tmp = db.stickerDao().getAllStickers();
+    fun onCreateEvent() {
+        val db = LocalDatabaseRepo.getDatabase(context)
+        val tmp = db.stickerDao().getAllStickers()
         if (isDelayTimeout() || (tmp != null && tmp.isEmpty())) {
             //db--close();
-            if (NetworkUtils.isNetworkConnected(context)) {
-                mView.refreshDB();
+            if (isNetworkConnected(context)) {
+                mView!!.refreshDB()
             } else {
-                AlertDialog.Builder builder = new AlertDialog.Builder(context);
-                builder.setTitle(context.getString(R.string.no_internet));
-                builder.show();
+                val builder = AlertDialog.Builder(context)
+                builder.setTitle(context.getString(R.string.no_internet))
+                builder.show()
             }
         } else {
             //db--close();
         }
     }
 
-    public String dec0(int[] intArray) {
-        char[] strArray = new char[intArray.length];
-        for (int i = 0; i < intArray.length; i++) {
-            strArray[i] = (char) intArray[i];
+    fun dec0(intArray: IntArray): String {
+        val strArray = CharArray(intArray.size)
+        for (i in intArray.indices) {
+            strArray[i] = intArray[i].toChar()
         }
-        return new StringBuilder((String.valueOf(strArray))).reverse().toString();
+        return StringBuilder((String(strArray))).reverse().toString()
     }
 
+    companion object {
+        // https://tgstickerscatalogue-default-rtdb.firebaseio.com/.json - Не из всех гео доступно...
+//        var v0: CharArray = charArrayOf(
+//            110.toChar(),
+//            111.toChar(),
+//            115.toChar(),
+//            106.toChar(),
+//            46.toChar(),
+//            47.toChar(),
+//            109.toChar(),
+//            111.toChar(),
+//            99.toChar(),
+//            46.toChar(),
+//            111.toChar(),
+//            105.toChar(),
+//            101.toChar(),
+//            115.toChar(),
+//            97.toChar(),
+//            98.toChar(),
+//            101.toChar(),
+//            114.toChar(),
+//            105.toChar(),
+//            102.toChar(),
+//            46.toChar(),
+//            98.toChar(),
+//            100.toChar(),
+//            116.toChar(),
+//            114.toChar(),
+//            45.toChar(),
+//            116.toChar(),
+//            108.toChar(),
+//            117.toChar(),
+//            97.toChar(),
+//            102.toChar(),
+//            101.toChar(),
+//            100.toChar(),
+//            45.toChar(),
+//            101.toChar(),
+//            117.toChar(),
+//            103.toChar(),
+//            111.toChar(),
+//            108.toChar(),
+//            97.toChar(),
+//            116.toChar(),
+//            97.toChar(),
+//            99.toChar(),
+//            115.toChar(),
+//            114.toChar(),
+//            101.toChar(),
+//            107.toChar(),
+//            99.toChar(),
+//            105.toChar(),
+//            116.toChar(),
+//            115.toChar(),
+//            103.toChar(),
+//            116.toChar(),
+//            47.toChar(),
+//            47.toChar(),
+//            58.toChar(),
+//            115.toChar(),
+//            112.toChar(),
+//            116.toChar(),
+//            116.toChar(),
+//            104.toChar()
+//        )
+
+        const val PREF_NAME: String = "Settings"
+    }
 }

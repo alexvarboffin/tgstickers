@@ -59,7 +59,7 @@ class StickerInfoActivity : FeatureActivity(), ImagesInfoAdapter.ImAdapterCallba
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter = StickerInfoPresenter(this)
+
         requestPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
@@ -71,11 +71,12 @@ class StickerInfoActivity : FeatureActivity(), ImagesInfoAdapter.ImAdapterCallba
                 showNoStoragePermissionSnackbar()
             }
         }
-        binding = ActivityStickerInfoBinding.inflate(getLayoutInflater())
+        presenter = StickerInfoPresenter(this, requestPermissionLauncher)
+        binding = ActivityStickerInfoBinding.inflate(layoutInflater)
         setContentView(binding!!.getRoot())
         setSupportActionBar(binding!!.toolbar)
-        getSupportActionBar()!!.setDisplayHomeAsUpEnabled(true)
-        getSupportActionBar()!!.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp)
+        supportActionBar!!.setDisplayHomeAsUpEnabled(true)
+        supportActionBar!!.setHomeAsUpIndicator(R.drawable.ic_close_white_24dp)
         k = KonfettiPresenter(binding!!.konfettiView)
         m = StickerUtils()
         this.mFirebaseAnalytics = FirebaseAnalytics.getInstance(this)
@@ -201,7 +202,7 @@ class StickerInfoActivity : FeatureActivity(), ImagesInfoAdapter.ImAdapterCallba
                 android.R.string.yes,
                 DialogInterface.OnClickListener { dialogInterface: DialogInterface?, i: Int ->
                     val bundle12 = Bundle()
-                    bundle12.putString("value", "Reported " + name)
+                    bundle12.putString("value", "Reported $name")
                     this@StickerInfoActivity.mFirebaseAnalytics!!.logEvent(
                         FirebaseAnalytics.Event.SHARE,
                         bundle12
@@ -307,7 +308,7 @@ class StickerInfoActivity : FeatureActivity(), ImagesInfoAdapter.ImAdapterCallba
     private fun setLayout() {
     }
 
-    override fun saveImageRequest(fileUrl: String?) {
+    override fun saveImageRequest(fileUrl: String) {
         presenter!!.saveImageRequest(fileUrl, link)
     }
 
@@ -317,7 +318,7 @@ class StickerInfoActivity : FeatureActivity(), ImagesInfoAdapter.ImAdapterCallba
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        getMenuInflater().inflate(R.menu.menu_stickerinfo, menu)
+        menuInflater.inflate(R.menu.menu_stickerinfo, menu)
         return super.onCreateOptionsMenu(menu)
     }
 

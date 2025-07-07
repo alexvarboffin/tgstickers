@@ -9,7 +9,7 @@ import android.os.Bundle;
 import com.walhalla.stickers.AddNewSticker;
 import com.walhalla.stickers.utils.TelegramUtils;
 import com.walhalla.telegramstickers.databinding.StickerAddBinding;
-import com.walhalla.telegramstickers.utils.NetworkUtils;
+import com.walhalla.stickers.utils.NetworkUtils;
 import com.walhalla.telegramstickers.R;
 
 public class AddStickerActivity extends Activity implements AddNewSticker.AddNewStickerCallback {

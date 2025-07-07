@@ -1,78 +1,56 @@
-package com.walhalla.stickers.downloader;
+package com.walhalla.stickers.downloader
+
+import android.app.DownloadManager
+import android.content.Context
+import android.net.Uri
+import android.os.Build
+import android.os.Environment
+import com.walhalla.stickers.presenter.PermissionResolver.Companion.checkExternalStoragePermission
+import com.walhalla.stickers.utils.IOUtils.hasMarsallow
+import com.walhalla.stickers.utils.Utils.ShowToast0
+import com.walhalla.ui.DLog.d
+import com.walhalla.ui.DLog.handleException
 
 
-import static com.walhalla.stickers.presenter.StickerInfoPresenter.PermissionResolver.checkExternalStoragePermission;
-
-import android.app.DownloadManager;
-import android.content.Context;
-import android.content.pm.PackageManager;
-import android.net.Uri;
-import android.os.Build;
-import android.os.Environment;
-
-import androidx.core.content.ContextCompat;
-
-import com.walhalla.stickers.utils.IOUtils;
-import com.walhalla.stickers.utils.Utils;
-import com.walhalla.ui.DLog;
-
-import java.util.HashSet;
+class DownloadFile private constructor() {
+    private val longHashSet = HashSet<Long?>()
 
 
-public class DownloadFile {
-
-    private static DownloadFile instance;
-    private final HashSet<Long> longHashSet = new HashSet<>();
-
-
-    private DownloadFile() {
-    }
-
-    public static DownloadFile newInstance() {
-        if (instance == null) {
-            instance = new DownloadFile();
-        }
-        return instance;
-    }
-
-
-
-    public void makeImageLoad(Context context, final String url, String stickerPackName) {
-        if (IOUtils.hasMarsallow()) {
+    fun makeImageLoad(context: Context, url: String, stickerPackName: String?) {
+        if (hasMarsallow()) {
             if (checkExternalStoragePermission(context)) {
             } else {
-                DLog.d("__________________________________");
-                return;
+                d("__________________________________")
+                return
             }
         }
 
         try {
-            String fileName = getFileNameFromUrl(url);
-            String fileExt = getFileExtensionFromUrl(url);
-            String fullFileName = makeFileName(fileName, fileExt);
-            DLog.d("[+][+] DownloadFileName: " + fullFileName + "\t\t" + url);
+            val fileName: String = getFileNameFromUrl(url)
+            val fileExt: String = getFileExtensionFromUrl(url)
+            val fullFileName = makeFileName(fileName, fileExt)
+            println("[+][+] DownloadFileName: " + fullFileName + "\t\t" + url)
 
 
-            DownloadManager manager = (DownloadManager) context.getSystemService(Context.DOWNLOAD_SERVICE);
-            DownloadManager.Request request = new DownloadManager.Request(Uri.parse(url));
-            request.setTitle(fileName);
-            request.setDescription("Downloading");
+            val manager = context.getSystemService(Context.DOWNLOAD_SERVICE) as DownloadManager?
+            val request = DownloadManager.Request(Uri.parse(url))
+            request.setTitle(fileName)
+            request.setDescription("Downloading")
 
 
             if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.HONEYCOMB) {
-                request.allowScanningByMediaScanner();
-                request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+                request.allowScanningByMediaScanner()
             }
 
-            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED);
+            request.setNotificationVisibility(DownloadManager.Request.VISIBILITY_VISIBLE_NOTIFY_COMPLETED)
 
             //request.setDestinationUri(Uri.fromFile(new File(mBaseFolderPath)));
             //ERROR >> request.setDestinationInExternalPublicDir(dir, fullFileName);
             //ERROR >> request.setDestinationInExternalPublicDir(mBaseFolderPath, fullFileName);
             //request.setDestinationInExternalFilesDir(context, mBaseFolderPath, fullFileName);
             //new File(context.getExternalFilesDir(Environment.DIRECTORY_DOWNLOADS)
-   //@         File file = new File(Config.pictureFolder(context), fullFileName);
-   //@         Uri uri = Uri.fromFile(file);
+            //@         File file = new File(Config.pictureFolder(context), fullFileName);
+            //@         Uri uri = Uri.fromFile(file);
             //Uri uri = FileProvider.getUriForFile(context, context.getPackageName() + ".provider", file);
             //Work in old --> request.setDestinationUri(uri);
 
@@ -84,37 +62,28 @@ public class DownloadFile {
             //request.setDestinationInExternalPublicDir(Environment.DIRECTORY_PICTURES,"Stickers");
 
             //work
-            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS,fullFileName);
+            request.setDestinationInExternalPublicDir(Environment.DIRECTORY_DOWNLOADS, fullFileName)
 
 
             if (Build.VERSION.SDK_INT < Build.VERSION_CODES.Q) {
-                request.allowScanningByMediaScanner();
-                request.setVisibleInDownloadsUi(true);
+                request.allowScanningByMediaScanner()
+                request.setVisibleInDownloadsUi(true)
             }
 
             if (manager != null) {
-                longHashSet.add(manager.enqueue(request));
+                longHashSet.add(manager.enqueue(request))
             }
 
 
             //DLog.d("[+] " + dir + " :: " + mBaseFolderPath);
-            Utils.ShowToast0(context, "Downloading Start!");
-        } catch (Exception e) {
-            DLog.handleException(e);
+            ShowToast0(context, "Downloading Start!")
+        } catch (e: Exception) {
+            println("@@@ $e")
+            handleException(e)
         }
     }
 
-    private static String getFileExtensionFromUrl(String url) {
-        int lastDotIndex = url.lastIndexOf(".");
-        return url.substring(lastDotIndex + 1);
-    }
-
-    private static String getFileNameFromUrl(String url) {
-        int lastSlashIndex = url.lastIndexOf("/");
-        return url.substring(lastSlashIndex + 1);
-    }
-
-    private String makeFileName(String fileName, String fileExt) {
+    private fun makeFileName(fileName: String?, fileExt: String?): String {
 //        String fullFileName = fileName.trim();
 //        String characterFilter = "[^\\p{L}\\p{M}\\p{N}\\p{P}\\p{Z}\\p{Cf}\\p{Cs}\\s]";
 //        fullFileName = fullFileName.replaceAll(characterFilter, "");
@@ -136,6 +105,27 @@ public class DownloadFile {
 //        }
 //        DLog.d(fileName);
 //        return fileName;
-        return System.currentTimeMillis() + "." + fileExt;
+        return System.currentTimeMillis().toString() + "." + fileExt
+    }
+
+    companion object {
+        private var instance: DownloadFile? = null
+        fun newInstance(): DownloadFile {
+            if (instance == null) {
+                instance = DownloadFile()
+            }
+            return instance!!
+        }
+
+
+        private fun getFileExtensionFromUrl(url: String): String {
+            val lastDotIndex = url.lastIndexOf(".")
+            return url.substring(lastDotIndex + 1)
+        }
+
+        private fun getFileNameFromUrl(url: String): String {
+            val lastSlashIndex = url.lastIndexOf("/")
+            return url.substring(lastSlashIndex + 1)
+        }
     }
 }

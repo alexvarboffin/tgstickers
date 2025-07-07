@@ -1,71 +1,66 @@
-package com.telegramstickers.catalogue.activity;
+package com.telegramstickers.catalogue.activity
 
-import android.app.Activity;
-import android.app.ProgressDialog;
-import android.content.Context;
-import android.content.Intent;
-import android.os.Bundle;
-import android.widget.EditText;
-import android.widget.Spinner;
+import android.app.Activity
+import android.app.ProgressDialog
+import android.content.Context
+import android.content.Intent
+import android.os.Bundle
+import android.view.View
+import com.telegramstickers.catalogue.R
+import com.telegramstickers.catalogue.databinding.StickerAddBinding
+import com.walhalla.stickers.AddNewSticker
+import com.walhalla.stickers.AddNewSticker.AddNewStickerCallback
+import com.walhalla.stickers.utils.NetworkUtils.isNetworkConnected
+import com.walhalla.stickers.utils.TelegramUtils
+import java.util.Locale
 
-import com.telegramstickers.catalogue.R;
-import com.telegramstickers.catalogue.databinding.StickerAddBinding;
-import com.walhalla.stickers.AddNewSticker;
+class AddStickerActivity : Activity(), AddNewStickerCallback {
+    //private val arraySpinner: Array<String>
 
-import com.walhalla.stickers.utils.TelegramUtils;
-import com.walhalla.telegramstickers.utils.NetworkUtils;
-
-public class AddStickerActivity extends Activity implements AddNewSticker.AddNewStickerCallback {
-
-
-    private String[] arraySpinner;
-
-
-    private ProgressDialog pDialog;
-    private StickerAddBinding binding;
+    private var pDialog: ProgressDialog? = null
+    private var binding: StickerAddBinding? = null
 
 
-    public void onCreate(Bundle bundle) {
-        super.onCreate(bundle);
-        binding = StickerAddBinding.inflate(getLayoutInflater());
-        setContentView(binding.getRoot());
-        binding.textView.setText(TelegramUtils.ADDSTICKERS);
-        binding.btnAddSticker.setOnClickListener(view -> {
-            if (!binding.inputTitle.getText().toString().matches("")
-                    && !binding.inputLink.getText().toString().matches("")
-                    && NetworkUtils.isNetworkConnected(this)) {
+    public override fun onCreate(bundle: Bundle?) {
+        super.onCreate(bundle)
+        binding = StickerAddBinding.inflate(layoutInflater)
+        setContentView(binding!!.getRoot())
+        binding!!.textView.text = TelegramUtils.ADDSTICKERS
+        binding!!.btnAddSticker.setOnClickListener(View.OnClickListener { view: View? ->
+            if (!binding!!.inputTitle.getText().toString()
+                    .matches("".toRegex()) && !binding!!.inputLink.getText().toString()
+                    .matches("".toRegex()) && isNetworkConnected(this)
+            ) {
+                onPreExecute(this)
 
-                onPreExecute(this);
-
-                String obj = binding.inputTitle.getText().toString();
-                String obj2 = binding.inputAuthor.getText().toString();
-                String lowerCase = binding.inputCategory.getSelectedItem().toString().toLowerCase();
-                String obj3 = binding.inputLink.getText().toString();
-                new AddNewSticker(this).execute(obj, obj2, obj3, lowerCase);
+                val obj = binding!!.inputTitle.getText().toString()
+                val obj2 = binding!!.inputAuthor.getText().toString()
+                val lowerCase = binding!!.inputCategory.getSelectedItem().toString()
+                    .lowercase(Locale.getDefault())
+                val obj3 = binding!!.inputLink.getText().toString()
+                AddNewSticker(this).execute(obj, obj2, obj3, lowerCase)
             }
-        });
+        })
     }
 
 
-    public void onPreExecute(Context context) {
-        this.pDialog = new ProgressDialog(context);
-        this.pDialog.setMessage(context.getString(R.string.sticker_sending));
-        this.pDialog.setIndeterminate(false);
-        this.pDialog.setCancelable(false);
-        this.pDialog.show();
+    fun onPreExecute(context: Context) {
+        this.pDialog = ProgressDialog(context)
+        this.pDialog!!.setMessage(context.getString(R.string.sticker_sending))
+        this.pDialog!!.setIndeterminate(false)
+        this.pDialog!!.setCancelable(false)
+        this.pDialog!!.show()
     }
 
 
-    @Override
-    public void setResultRequest(int result) {
-        this.setResult(result, new Intent());
-        this.finish();
+    override fun setResultRequest(result: Int) {
+        this.setResult(result, Intent())
+        this.finish()
     }
 
-    @Override
-    public void hideDialog() {
-        if (pDialog != null && pDialog.isShowing()) {
-            pDialog.dismiss();
+    override fun hideDialog() {
+        if (pDialog != null && pDialog!!.isShowing()) {
+            pDialog!!.dismiss()
         }
     }
 }

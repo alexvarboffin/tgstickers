@@ -9,4 +9,7 @@
     <string name="share_qr_code">Отсканируйте QRcode</string>
     <string name="emptyFavoriteList">Список избранных стикеров пуст</string>
 
+
+
+    <string name="action_share_image">Поделиться картинкой</string>
 </resources>

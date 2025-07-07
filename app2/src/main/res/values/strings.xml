@@ -98,7 +98,7 @@
     <string name="sticker_name">Sticker Name</string>
     <string name="dictionary_all">All Stickers</string>
     <string name="splash_loading">Loading…</string>
-    <string name="action_share_image">Share Image</string>
+
     <string name="action_save_image">Save Image</string>
 
 </resources>

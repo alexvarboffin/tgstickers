@@ -56,7 +56,7 @@ class StickerInfoActivity : FeatureActivity(), ImagesInfoAdapter.ImAdapterCallba
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        presenter = StickerInfoPresenter(this)
+
         requestPermissionLauncher = registerForActivityResult(
             ActivityResultContracts.RequestPermission()
         ) { isGranted ->
@@ -68,6 +68,7 @@ class StickerInfoActivity : FeatureActivity(), ImagesInfoAdapter.ImAdapterCallba
                 showNoStoragePermissionSnackbar()
             }
         }
+        presenter = StickerInfoPresenter(this, requestPermissionLauncher)
         binding = ActivityStickerInfoBinding.inflate(getLayoutInflater())
         setContentView(binding!!.getRoot())
         setSupportActionBar(binding!!.toolbar)
@@ -303,7 +304,7 @@ class StickerInfoActivity : FeatureActivity(), ImagesInfoAdapter.ImAdapterCallba
     private fun setLayout() {
     }
 
-    override fun saveImageRequest(fileUrl: String?) {
+    override fun saveImageRequest(fileUrl: String) {
         presenter!!.saveImageRequest(fileUrl, link)
     }
 
@@ -335,7 +336,7 @@ class StickerInfoActivity : FeatureActivity(), ImagesInfoAdapter.ImAdapterCallba
     }
 
     companion object {
-        private val KEY_ARG_ID: String = StickerInfoActivity::class.java.getSimpleName()
+        private val KEY_ARG_ID: String = StickerInfoActivity::class.java.simpleName
 
         //private BannerAdapter adapter;
         @JvmStatic

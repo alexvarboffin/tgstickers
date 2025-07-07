@@ -16,7 +16,6 @@
     <string name="add_it_to_favorites_question">Do you want add it to favorites stickers?</string>
     <string name="remove_from_favorites_question">Do you want remove it from favorites stickers?</string>
 
-    <string name="action_share_image">Share Image</string>
     <string name="action_save_image">Save Image</string>
     <string name="desc_add_to_favorite">Add to Favorite</string>
     <string name="dictionary_all">All Stickers</string>
@@ -27,4 +26,7 @@
     <string name="emptyFavoriteList">The list of favorite stickers is empty</string>
     <string name="sticker_name">Sticker Name</string>
     <string name="install_stickers">INSTALL STICKERS</string>
+
+
+    <string name="action_share_image">Share Image</string>
 </resources>

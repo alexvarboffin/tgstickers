@@ -10,7 +10,7 @@ import com.walhalla.stickers.database.StickerDb
 import com.walhalla.stickers.network.JSONParser
 import com.walhalla.stickers.presenter.StickersPresenter
 import com.walhalla.telegramstickers.activity.main.MainActivity
-import com.walhalla.telegramstickers.utils.NetworkUtils.isNetworkConnected
+import com.walhalla.stickers.utils.NetworkUtils.isNetworkConnected
 import com.walhalla.ui.DLog.d
 import com.walhalla.ui.DLog.handleException
 import org.json.JSONObject
@@ -170,7 +170,7 @@ class MainPresenter(private val context: Context, handler: Handler, activity: Ma
         val tmp = db.stickerDao().getAllStickers()
         if (isDelayTimeout() || (tmp != null && tmp.isEmpty())) {
             //db--close();
-            if (isNetworkConnected(context) || 1 == 1) {
+            if (isNetworkConnected(context)) {
                 mView!!.refreshDB()
             } else {
                 val builder = AlertDialog.Builder(context)

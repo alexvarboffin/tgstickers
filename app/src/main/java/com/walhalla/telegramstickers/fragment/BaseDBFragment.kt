@@ -23,7 +23,7 @@ import java.util.Random
 
 class BaseDBFragment : Fragment(), ItemClickListener {
     protected var db: AppDatabase? = null
-    var list: MutableList<StickerDb?>? = ArrayList<StickerDb?>()
+    var list: MutableList<StickerDb> = ArrayList<StickerDb>()
 
 
     private var val0: String? = ""

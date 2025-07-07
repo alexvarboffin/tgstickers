@@ -22,7 +22,9 @@ import com.bumptech.glide.request.target.Target
 import com.telegramstickers.catalogue.R
 import com.telegramstickers.catalogue.databinding.ItemStickerImagesBinding
 import com.walhalla.abcsharedlib.Share.makeImageShare
-import com.walhalla.telegramstickers.utils.CoreUtil
+import com.walhalla.stickers.utils.CoreUtil
+import androidx.core.graphics.createBitmap
+import com.walhalla.stickers.adapter.shareImage1
 
 class ImagesInfoAdapter
     (
@@ -32,7 +34,7 @@ class ImagesInfoAdapter
     private val clb: ImAdapterCallback?
 ) : RecyclerView.Adapter<RecordHolder1?>() {
     interface ImAdapterCallback {
-        fun saveImageRequest(resource: String?)
+        fun saveImageRequest(resource: String)
     }
 
     private var popup: PopupMenu? = null
@@ -119,10 +121,10 @@ class ImagesInfoAdapter
     }
 
 
-    private fun showPopupMenu(view: View, resource: String?, stickerImage: ImageView?) {
-        popup = PopupMenu(view.getContext(), view)
-        val inflater = popup!!.getMenuInflater()
-        val menu = popup!!.getMenu()
+    private fun showPopupMenu(view: View, resource: String?, stickerImage: ImageView) {
+        popup = PopupMenu(view.context, view)
+        val inflater = popup!!.menuInflater
+        val menu = popup!!.menu
         inflater.inflate(R.menu.item_sticker, menu)
         try {
             @SuppressLint("DiscouragedPrivateApi")
@@ -130,69 +132,29 @@ class ImagesInfoAdapter
             fMenuHelper.isAccessible = true
             val menuHelper = fMenuHelper.get(popup)
             val argTypes = arrayOf(Boolean::class.javaPrimitiveType)
-            menuHelper.javaClass.getDeclaredMethod("setForceShowIcon", *argTypes).invoke(menuHelper, true)
+            menuHelper.javaClass.getDeclaredMethod("setForceShowIcon", *argTypes)
+                .invoke(menuHelper, true)
         } catch (e: Exception) {
             // обработка ошибки (можно залогировать или проигнорировать)
         }
         popup!!.setOnMenuItemClickListener(PopupMenu.OnMenuItemClickListener { menuItem: MenuItem? ->
-            val itemId = menuItem!!.getItemId()
-            //            if (itemId == R.id.menu_share_image) {
-//                shareImage(context, resource, stickerImage);
-//            } else
-            if (itemId == R.id.menu_save_image) {
-                if (clb != null) {
-                    clb.saveImageRequest(resource)
+            val itemId = menuItem!!.itemId
+            if (itemId == R.id.menu_share_image) {
+                if (popup != null) {
+                    popup!!.dismiss()
                 }
-            }
+                shareImage1(context, resource, stickerImage, fileNamePrefix())
+            } else
+                if (itemId == R.id.menu_save_image) {
+                    if (clb != null) {
+                        clb.saveImageRequest(resource?:"")
+                    }
+                }
             false
         })
         popup!!.show()
     }
 
-
-    private fun shareImage(context: Context, resource: String?, parent: ImageView) {
-        if (popup != null) {
-            popup!!.dismiss()
-        }
-        //showWatermark(tv_quotes_watermark, tools);
-        val bitmap =
-            Bitmap.createBitmap(parent.getWidth(), parent.getHeight(), Bitmap.Config.ARGB_8888)
-        val canvas = Canvas(bitmap)
-        parent.draw(canvas)
-
-        val file = CoreUtil.makeLocalExportFileName(context, fileNamePrefix())
-        val uri = CoreUtil.getLocalBitmapUri(context, file, bitmap)
-
-        //hideWatermark(tv_quotes_watermark, tools);
-        val appName = context.getString(R.string.app_name)
-
-        val extra = appName + ",  " + resource
-
-        //        if (QTextUtils.isAuthorNotEmpty(status.getAuthor())) {
-//            extra = extra + "\n" + "— " + status.getAuthor() + "\n" + appName;
-//        }
-        val intent = makeImageShare(extra)
-        intent.putExtra(Intent.EXTRA_STREAM, uri)
-        intent.putExtra(Intent.EXTRA_SUBJECT, appName)
-
-        //intent.putExtra(Intent.EXTRA_TITLE, appName);
-
-        //BugFix
-        //java.lang.SecurityException: Permission Denial: reading androidx.core.content.FileProvider
-        val chooser = Intent.createChooser(intent, appName)
-        val resInfoList = context.getPackageManager()
-            .queryIntentActivities(chooser, PackageManager.MATCH_DEFAULT_ONLY)
-        for (resolveInfo in resInfoList) {
-            val packageName = resolveInfo.activityInfo.packageName
-            context.grantUriPermission(
-                packageName, uri, Intent.FLAG_GRANT_WRITE_URI_PERMISSION
-                        or Intent.FLAG_GRANT_READ_URI_PERMISSION
-            )
-        }
-
-        context.startActivity(chooser)
-        //Toast.makeText(getActivity(), share_as_image, Toast.LENGTH_SHORT).show();
-    }
 
     private fun fileNamePrefix(): String {
         return "sticker_"

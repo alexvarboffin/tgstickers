@@ -1,5 +1,6 @@
 package com.walhalla.stickers.fragment
 
+import android.app.Fragment
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
@@ -9,7 +10,7 @@ import android.view.View
 import android.widget.Toast
 import androidx.appcompat.app.AlertDialog
 import androidx.appcompat.app.AppCompatActivity
-import androidx.fragment.app.Fragment
+
 import androidx.fragment.app.FragmentActivity
 import com.walhalla.stickers.AppDatabase
 import com.walhalla.stickers.R
@@ -28,8 +29,10 @@ import com.walhalla.utils.AManagerI.RewardManagerCallback
 import com.walhalla.utils.RewardManager
 import androidx.core.graphics.drawable.toDrawable
 
-abstract class AbstractStatusListFragment : Fragment(), FragmentRefreshListener, ItemClickListener,
-    RewardManagerCallback {
+const val UNLOCK_ITEM_IF_FAILED = true
+
+
+abstract class AbstractStatusListFragment : androidx.fragment.app.Fragment(), FragmentRefreshListener, ItemClickListener{
     @JvmField
     protected var m: KSUtil? = null
     private var rm: RewardManager? = null
@@ -40,6 +43,8 @@ abstract class AbstractStatusListFragment : Fragment(), FragmentRefreshListener,
     var adapter: AbstractStickerAdapter? = null
     @JvmField
     protected var title: String? = null
+
+
 
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -60,8 +65,8 @@ abstract class AbstractStatusListFragment : Fragment(), FragmentRefreshListener,
     }
 
     private fun handleInstance() {
-        val bundle = getArguments()
-        if (getArguments() != null) {
+        val bundle = arguments
+        if (arguments != null) {
             this.title = bundle!!.getString(MyIntent.KEY_CAT_NAME)
         }
         if (activity != null) {
@@ -77,7 +82,7 @@ abstract class AbstractStatusListFragment : Fragment(), FragmentRefreshListener,
     }
 
     override fun onRefresh() {
-        val list: MutableList<StickerDb?>?
+        val list: MutableList<StickerDb>?
         if (TextUtils.isEmpty(title)) {
             list = db!!.stickerDao().getAllStickers()
         } else {
@@ -86,7 +91,7 @@ abstract class AbstractStatusListFragment : Fragment(), FragmentRefreshListener,
         handleMessage(list)
     }
 
-    private fun handleMessage(message: MutableList<StickerDb?>?) {
+    private fun handleMessage(message: MutableList<StickerDb>?) {
         if (message == null || message.isEmpty()) {
             this.adapter!!.swap(EmptyViewModel(""))
 
@@ -105,14 +110,35 @@ abstract class AbstractStatusListFragment : Fragment(), FragmentRefreshListener,
 //                .setNegativeButton("Cancel", null)
 //                .show();
         val builder = AlertDialog.Builder(activity)
-        val inflater = activity.getLayoutInflater()
+        val inflater = activity.layoutInflater
         val binding = RewardDialogLayoutBinding.inflate(inflater)
         builder.setView(binding.getRoot())
         val alertDialog = builder.create()
         alertDialog.window!!.setBackgroundDrawable(Color.TRANSPARENT.toDrawable())
         binding.dPurchase.setOnClickListener(View.OnClickListener { view: View? ->
             alertDialog.dismiss()
-            rm!!.showRewardAdBanner(requireActivity(), position, this)
+            rm!!.showRewardAdBanner(requireActivity(), position, object : RewardManagerCallback {
+                override fun successResult7(position: Int) {
+                    d("@@@@@@")
+                    // User earned the reward.
+                    m!!.unlockItem(position)
+                    if (mainCallback != null) {
+                        mainCallback!!.rewardExplode()
+                    } else {
+                        //Toast.makeText(getActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
+                    }
+                    adapter!!.notifyItemChanged(position)
+                    //handleProxy(data);
+                }
+
+                override fun errorShowAds(position: Int) {
+                    if(UNLOCK_ITEM_IF_FAILED){
+                        m?.unlockItem(position)//Unlock if ads not loaded
+                        adapter?.notifyItemChanged(position)//Unlock if ads not loaded
+                    }
+                    Toast.makeText(context, R.string.ad_not_loaded_try_another_time, Toast.LENGTH_SHORT).show()
+                }
+            })
         })
         binding.dCancel.setOnClickListener(View.OnClickListener { view: View? -> alertDialog.dismiss() })
         alertDialog.show()
@@ -133,22 +159,6 @@ abstract class AbstractStatusListFragment : Fragment(), FragmentRefreshListener,
         Module_U.shareText(requireContext(), TelegramUtils.ADDSTICKERS_WEB + sticker.link, null)
     }
 
-    override fun successResult7(position: Int) {
-        d("@@@@@@")
-        // User earned the reward.
-        m!!.unlockItem(position)
-        if (this.mainCallback != null) {
-            this.mainCallback!!.rewardExplode()
-        } else {
-            //Toast.makeText(getActivity(), getString(R.string.try_again), Toast.LENGTH_SHORT).show();
-        }
-        adapter!!.notifyItemChanged(position)
-        //handleProxy(data);
-    }
-
-    override fun errorShowAds() {
-        Toast.makeText(context, R.string.ad_not_loaded_try_another_time, Toast.LENGTH_SHORT).show()
-    }
 
 
     //callback

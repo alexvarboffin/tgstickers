@@ -1,18 +1,20 @@
-package com.walhalla.stickers.utils;
+package com.walhalla.stickers.utils
 
-import android.annotation.SuppressLint;
-import android.os.Build;
+import android.annotation.SuppressLint
+import android.os.Build
 
 @SuppressLint("ObsoleteSdkInt")
-public class IOUtils {
+object IOUtils {
+    fun hasGingerbread(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD
+    }
 
-    public static boolean hasGingerbread() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.GINGERBREAD;
+    fun hasLolipop(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP
     }
-    public static boolean hasLolipop() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP;
-    }
-    public static boolean hasMarsallow() {
-        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M;
+
+    @JvmStatic
+    fun hasMarsallow(): Boolean {
+        return Build.VERSION.SDK_INT >= Build.VERSION_CODES.M
     }
 }

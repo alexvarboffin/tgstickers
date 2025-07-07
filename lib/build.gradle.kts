@@ -40,6 +40,9 @@ android {
 }
 
 dependencies {
+
+    implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar", "*.aar"))))
+
     // AndroidX Core
     implementation(libs.androidx.appcompat)
     implementation(libs.material)
@@ -57,7 +60,7 @@ dependencies {
 
     // Third party libraries
     //implementation("com.github.alexvarboffin:mint-android-app:1.5.2")
-    api(libs.toasty)
+    //api(libs.toasty)
 
     // Room
     implementation(libs.androidx.room.runtime)

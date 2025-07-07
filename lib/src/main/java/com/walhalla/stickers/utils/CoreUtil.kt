@@ -1,11 +1,11 @@
-package com.walhalla.telegramstickers.utils
+package com.walhalla.stickers.utils
 
 import android.content.Context
 import android.graphics.Bitmap
 import android.net.Uri
 import androidx.core.content.FileProvider
-import com.walhalla.abcsharedlib.Share.KEY_FILE_PROVIDER
-import com.walhalla.ui.DLog.handleException
+import com.walhalla.abcsharedlib.Share
+import com.walhalla.ui.DLog
 import java.io.File
 import java.io.FileNotFoundException
 import java.io.FileOutputStream
@@ -38,13 +38,13 @@ object CoreUtil {
             val out = FileOutputStream(file)
             bitmap.compress(Bitmap.CompressFormat.PNG, 100, out)
             out.close()
-            bmpUri = FileProvider.getUriForFile(context, APPLICATION_ID + KEY_FILE_PROVIDER, file)
+            bmpUri = FileProvider.getUriForFile(context, APPLICATION_ID + Share.KEY_FILE_PROVIDER, file)
         } catch (e: FileNotFoundException) {
-            handleException(e)
+            DLog.handleException(e)
         } catch (e: IOException) {
-            handleException(e)
+            DLog.handleException(e)
         } catch (e: SecurityException) {
-            handleException(e)
+            DLog.handleException(e)
         }
         return bmpUri
     }

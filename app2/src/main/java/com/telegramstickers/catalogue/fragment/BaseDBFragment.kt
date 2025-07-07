@@ -23,7 +23,7 @@ import java.util.Random
 
 class BaseDBFragment : Fragment(), ItemClickListener {
     protected var db: AppDatabase? = null
-    var list: MutableList<StickerDb?>? = ArrayList<StickerDb?>()
+    var list: MutableList<StickerDb> = ArrayList<StickerDb>()
 
 
     private var val0: String? = ""
@@ -34,7 +34,7 @@ class BaseDBFragment : Fragment(), ItemClickListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         m = KSUtil.getInstance(getActivity())
-        if (getArguments() != null) {
+        if (arguments != null) {
             val0 = requireArguments().getString(KEY_BUNDLE_0)
             val a = getActivity() as AppCompatActivity?
             if (a != null) {
@@ -45,7 +45,7 @@ class BaseDBFragment : Fragment(), ItemClickListener {
             }
         }
         db = LocalDatabaseRepo.getDatabase(getActivity())
-        adapter = StickerAdapter(getContext(), m!!.getBlockedItems(), db!!.stickerDao(), false)
+        adapter = StickerAdapter(context, m!!.blockedItems, db!!.stickerDao(), false)
     }
 
     override fun onCreateView(
@@ -54,9 +54,9 @@ class BaseDBFragment : Fragment(), ItemClickListener {
         bundle: Bundle?
     ): View? {
         val binding = FragmentMainBinding.inflate(layoutInflater, viewGroup, false)
-        db = LocalDatabaseRepo.getDatabase(getActivity())
+        db = LocalDatabaseRepo.getDatabase(activity)
         val defaultSpanCount = 3
-        val lm = adapter!!.getGridLayoutManager(getContext(), defaultSpanCount)
+        val lm = adapter!!.getGridLayoutManager(context, defaultSpanCount)
         binding.recyclerView.setLayoutManager(lm)
         adapter!!.setOnItemClickListener(this)
         binding.recyclerView.setAdapter(adapter)
@@ -70,13 +70,13 @@ class BaseDBFragment : Fragment(), ItemClickListener {
         if (this.list == null || list!!.isEmpty()) {
             adapter!!.swap(EmptyViewModel(""))
         } else {
-            Collections.shuffle(this.list, Random(System.nanoTime()))
+            this.list.shuffle(Random(System.nanoTime()))
             adapter!!.swap(list)
         }
     }
 
     override fun onItemClick(stickerDb: StickerDb, position: Int) {
-        val intent = newIntent(getContext(), stickerDb._id)
+        val intent = newIntent(context, stickerDb._id)
         this@BaseDBFragment.startActivity(intent)
     }
 

@@ -1,7 +1,7 @@
 package com.walhalla.stickers.utils
 
 import com.walhalla.stickers.compat.ComV19
-
+import es.dmoral.toasty.Toasty
 
 
 object Utils {
@@ -74,29 +74,30 @@ object Utils {
 //    }
 
     @JvmStatic
-    fun ShowToast0(context: android.content.Context, str: kotlin.String?) {
-//        val comv19: ComV19 = ComV19()
-//        Toasty.custom(
-//            context, str,
-//            comv19.getDrawable(context, com.walhalla.stickers.R.drawable.ic_info),
-//            androidx.core.content.ContextCompat.getColor(
-//                context,
-//                com.walhalla.stickers.R.color.colorPrimaryDark
-//            ),
-//            androidx.core.content.ContextCompat.getColor(context, android.R.color.white),
-//            Toasty.LENGTH_SHORT, true, true
-//        ).show()
+    fun ShowToast0(context: android.content.Context, str: kotlin.String) {
+        println("@@@ $str")
+        val comv19: ComV19 = ComV19()
+        Toasty.custom(
+            context, str,
+            comv19.getDrawable(context, com.walhalla.stickers.R.drawable.ic_info),
+            androidx.core.content.ContextCompat.getColor(
+                context,
+                com.walhalla.stickers.R.color.colorPrimaryDark
+            ),
+            androidx.core.content.ContextCompat.getColor(context, android.R.color.white),
+            Toasty.LENGTH_SHORT, true, true
+        ).show()
     }
 
-    fun ShowToast0(context: android.content.Context?, res: kotlin.Int) {
-//        val comv19: ComV19 = ComV19()
-//        Toasty.custom(
-//            context, res,
-//            comv19.getDrawable(context, com.walhalla.stickers.R.drawable.ic_info),
-//            com.walhalla.stickers.R.color.colorPrimaryDark,
-//            android.R.color.white,
-//            Toasty.LENGTH_SHORT, true, true
-//        ).show()
+    fun ShowToast0(context: android.content.Context, res: kotlin.Int) {
+        val comv19: ComV19 = ComV19()
+        Toasty.custom(
+            context, res,
+            comv19.getDrawable(context, com.walhalla.stickers.R.drawable.ic_info),
+            com.walhalla.stickers.R.color.colorPrimaryDark,
+            android.R.color.white,
+            Toasty.LENGTH_SHORT, true, true
+        ).show()
     }
 
     fun isValidUrl(input: kotlin.CharSequence?): kotlin.Boolean {

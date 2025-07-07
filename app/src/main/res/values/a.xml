@@ -8,6 +8,8 @@
 <!--    <string name="i1" translatable="false">@</string>-->
     <string name="r1" translatable="false">ca-app-pub-5111357348858303/4021004082</string>
     <string name="url_privacy_policy" translatable="false">https://tgstickers-dbce8.web.app/privacy_policy.html</string>
-    <string name="rewardedId" translatable="false">ca-app-pub-5111357348858303/4626873931</string>
+
+
+    <string name="rewardedId" translatable="false">ca-app-pub-5111357348858303/3429106902</string>
 
 </resources>
