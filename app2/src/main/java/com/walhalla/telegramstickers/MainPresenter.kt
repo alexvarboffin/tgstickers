@@ -54,7 +54,7 @@ class MainPresenter(private val context: Context, handler: Handler, activity: Ma
 
         executor.execute(Runnable {
             var totalStickersLength = 0
-            val stickersArray: MutableList<StickerDb?> = ArrayList<StickerDb?>()
+            val stickersArray: MutableList<StickerDb> = ArrayList()
             val jParser = JSONParser()
             val makeHttpRequest =
                 jParser.makeHttpRequest(url_all_stickers, "GET", HashMap<Any?, Any?>())
@@ -132,18 +132,18 @@ class MainPresenter(private val context: Context, handler: Handler, activity: Ma
     }
 
 
-    private fun onPostExecute(arrayList: MutableList<StickerDb?>, totalStickersLength: Int) {
+    private fun onPostExecute(arrayList: MutableList<StickerDb>, totalStickersLength: Int) {
         sharedPreferences.edit {
             putLong(KEY_DATE, (System.currentTimeMillis() / 1000) + ONE_HOUR)
         }
         if (mView != null) {
-            handler.post(Runnable {
+            handler.post {
                 if (!arrayList.isEmpty()) {
                     val db = LocalDatabaseRepo.getDatabase(context)
                     db.stickerDao().deleteAllStickers()
                     val total = arrayList.size
                     for (i in 0..<total) {
-                        val item = arrayList.get(i)
+                        val item = arrayList[i]
                         //if (!db.checkSticker(item.name)) {
                         db.stickerDao().insertSticker(item)
                         //}
@@ -155,7 +155,7 @@ class MainPresenter(private val context: Context, handler: Handler, activity: Ma
                     }
                 }
                 mView.successResult00(arrayList)
-            })
+            }
         }
     }
 

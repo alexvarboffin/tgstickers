@@ -51,12 +51,15 @@ import nl.dionsegijn.konfetti.xml.KonfettiView
 import nl.dionsegijn.konfetti.xml.listeners.OnParticleSystemUpdateListener
 import java.util.Arrays
 import java.util.concurrent.TimeUnit
+import androidx.core.view.get
+import androidx.core.view.isNotEmpty
+import com.google.android.gms.common.util.CollectionUtils.listOf
 
 class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedListener,
     MainFragment.FCallback, AbstractStatusListFragment.Callback {
     private var fragmentRefreshListener: FragmentRefreshListener? = null
 
-    var stickersList: ArrayList<HashMap<String?, String?>?>? = null
+    var stickersList: ArrayList<HashMap<String, String>>? = null
 
 
     private var dialog: ProgressDialog? = null
@@ -74,8 +77,8 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
     private var drawableShape: DrawableShape? = null
 
 
-    fun successResult00(arrayList: MutableList<StickerDb?>?) {
-        if (this.dialog != null && this.dialog!!.isShowing()) {
+    fun successResult00(arrayList: MutableList<StickerDb>) {
+        if (this.dialog != null && this.dialog!!.isShowing) {
             this.dialog!!.dismiss()
 
             if (this.getFragmentRefreshListener() != null) {
@@ -85,9 +88,9 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
     }
 
     override fun onNavigationItemSelected(menuItem: MenuItem): Boolean {
-        val itemId = menuItem.getItemId()
+        val itemId = menuItem.itemId
         var found = false
-        var CURRENT_TAG = menuItem.getTitle().toString()
+        var CURRENT_TAG = menuItem.title.toString()
         for (nav in NavigationCls.mNav0) {
             if (itemId == nav.id) {
                 CURRENT_TAG = nav.tag
@@ -152,24 +155,24 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
         //else {navItemIndex = 1;}
 
         //Checking if the menuItem is in checked state or not, if not make it in checked state
-        if (menuItem.isChecked()) {
-            menuItem.setChecked(false)
+        if (menuItem.isChecked) {
+            menuItem.isChecked = false
         } else {
-            menuItem.setChecked(true)
+            menuItem.isChecked = true
         }
-        menuItem.setChecked(true)
+        menuItem.isChecked = true
 
         getFragmentByTagName(CURRENT_TAG)
-        //            DrawerLayout drawer = findViewById(R.itemId.drawer_layout);
+//            DrawerLayout drawer = findViewById(R.itemId.drawer_layout);
 //            drawer.closeDrawer(GravityCompat.START);
         return true
     }
 
     public override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        binding = ActivityMainBinding.inflate(getLayoutInflater())
+        binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding!!.getRoot())
-        val drawable = ContextCompat.getDrawable(getApplicationContext(), R.drawable.ic_heart)
+        val drawable = ContextCompat.getDrawable(applicationContext, R.drawable.ic_heart)
         if (drawable != null) {
             drawableShape = DrawableShape(drawable, true, true)
         }
@@ -179,7 +182,7 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
         val gdpr = GDPR()
         gdpr.init(this)
 
-        //        AdRequest build = new AdRequest.Builder().build();
+//        AdRequest build = new AdRequest.Builder().build();
 //        mBind.adView.setAdListener(new AdListener() {
 //            @Override
 //            public void onAdLoaded() {
@@ -209,8 +212,8 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
 //            }
 //            onSetMachine(State.RESUME_GAME);
         } else {
-            getSupportFragmentManager().beginTransaction()
-                .add(binding!!.frameContainer.getId(), MainFragment())
+            supportFragmentManager.beginTransaction()
+                .add(binding!!.frameContainer.id, MainFragment())
                 .commit()
         }
 
@@ -235,7 +238,7 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
                 if (getCurrentFocus() != null) {
                     if (inputMethodManager != null) {
                         inputMethodManager.hideSoftInputFromWindow(
-                            getCurrentFocus()!!.getWindowToken(),
+                            currentFocus!!.windowToken,
                             0
                         )
                     }
@@ -255,32 +258,30 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
                 super.onDrawerOpened(drawerView!!)
                 val inputMethodManager =
                     getSystemService(INPUT_METHOD_SERVICE) as InputMethodManager?
-                if (getCurrentFocus() != null) {
-                    if (inputMethodManager != null) {
-                        inputMethodManager.hideSoftInputFromWindow(
-                            getCurrentFocus()!!.getWindowToken(),
-                            0
-                        )
-                    }
+                if (currentFocus != null) {
+                    inputMethodManager?.hideSoftInputFromWindow(
+                        currentFocus!!.windowToken,
+                        0
+                    )
                 }
             }
         }
         binding!!.drawerLayout.addDrawerListener(toggle) //Setting the actionbarToggle to drawer layout
         toggle.syncState() //calling sync state is necessary or else your hamburger icon wont show up
 
-        //        final Menu menu = navigationView.getMenu();
+//        final Menu menu = navigationView.getMenu();
 //        for (int i = 0; i < menu.size(); i++) {
 //            MenuItem item = menu.getItem(i);
 //            DLog.d("" + item.toString()+" "+item.getGroupId()+" "+item.getItemId()+" "+item.hasSubMenu());
 //        }
         binding!!.navView.setNavigationItemSelectedListener(this)
-        var menu: Menu? = binding!!.navView.getMenu()
-        val mainMenu = binding!!.navView.getMenu() //inject in root
-        if (mainMenu.size() > 0) {
+        var menu: Menu? = binding!!.navView.menu
+        val mainMenu = binding!!.navView.menu //inject in root
+        if (mainMenu.isNotEmpty()) {
             //inject in submenu
-            val menuItem = mainMenu.getItem(0)
+            val menuItem = mainMenu[0]
             if (menuItem.hasSubMenu()) {
-                menu = menuItem.getSubMenu()
+                menu = menuItem.subMenu
             }
         }
 
@@ -303,8 +304,8 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
     }
 
     override fun onCreateOptionsMenu(menu: Menu?): Boolean {
-        getMenuInflater().inflate(R.menu.menu_main, menu)
-        //        menu.add("x").setOnMenuItemClickListener(v->{
+        menuInflater.inflate(R.menu.menu_main, menu)
+//        menu.add("x").setOnMenuItemClickListener(v->{
 //            throw new RuntimeException("Test Crash"); // Force a crash
 //        });
         return super.onCreateOptionsMenu(menu)
@@ -334,7 +335,7 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
         } else {
             return super.onOptionsItemSelected(item)
         }
-        //            case R.id.action_exit:
+//            case R.id.action_exit:
 //                this.finish();
 //                return true;//case R.id.action_more_app_01:
 //                Module_U.moreApp(this, "com.walhalla.ttloader");
@@ -347,7 +348,7 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
 
 
     fun refreshDB() {
-        this.stickersList = ArrayList<HashMap<String?, String?>?>()
+        this.stickersList = ArrayList()
         showDialog()
         presenter!!.execute()
     }
@@ -448,14 +449,14 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
             binding!!.drawerLayout.closeDrawer(GravityCompat.START)
         } else {
             //Pressed back => return to home screen
-            val count = getSupportFragmentManager().getBackStackEntryCount()
-            if (getSupportActionBar() != null) {
-                getSupportActionBar()!!.setHomeButtonEnabled(count > 0)
+            val count = supportFragmentManager.backStackEntryCount
+            if (supportActionBar != null) {
+                supportActionBar!!.setHomeButtonEnabled(count > 0)
             }
             if (count > 0) {
-                val fm = getSupportFragmentManager()
+                val fm = supportFragmentManager
                 fm.popBackStack(
-                    fm.getBackStackEntryAt(0).getId(),
+                    fm.getBackStackEntryAt(0).id,
                     FragmentManager.POP_BACK_STACK_INCLUSIVE
                 )
             } else { //count == 0
@@ -512,7 +513,7 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
     //        builder.show();
     //    }
     private fun dismissProgressDialog() {
-        if (this.dialog != null && this.dialog!!.isShowing()) {
+        if (this.dialog != null && this.dialog!!.isShowing) {
             this.dialog!!.dismiss()
         }
     }
@@ -527,7 +528,7 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
         // if user select the current navigation menu again, don't do anything
         // just close the navigation drawer
 
-        if (getSupportFragmentManager().findFragmentByTag(currentTag) != null) {
+        if (supportFragmentManager.findFragmentByTag(currentTag) != null) {
             binding!!.drawerLayout.closeDrawers()
             // show or hide the fab button
             //toggleFab();
@@ -599,8 +600,8 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
     fun replaceFragmentWithPopBackStack(fragmentTag: String) {
         //Clear back stack
         //final int count = fm.getBackStackEntryCount();
-        val fm = getSupportFragmentManager()
-        if (!fm.isStateSaved()) {
+        val fm = supportFragmentManager
+        if (!fm.isStateSaved) {
             if (fragmentTag.contains(TypeNavItem.TAG_SHOW_AUTHOR)) {
                 //not popup + AppNavigator.TAG_DIVIDER
             } else {
@@ -621,14 +622,14 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
                 ft.addToBackStack(fragmentTag)
                 //ft.replace(R.id.container, fragment);
                 ft.replace(
-                    binding!!.frameContainer.getId(),
+                    binding!!.frameContainer.id,
                     fragment,
                     fragmentTag
                 ) //set this fragment in stack
                 //@@ft.replace(R.id.container, fragment, null);
             } else {
                 ft.addToBackStack(null)
-                ft.replace(binding!!.frameContainer.getId(), fragment, null)
+                ft.replace(binding!!.frameContainer.id, fragment, null)
             }
 
 
@@ -647,7 +648,7 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
     }
 
     private fun getHomeFragment(currentTag: String): Fragment {
-        //            case TAG_SETTINGS:
+//            case TAG_SETTINGS:
 //                // settings fragment
 //                return KeywordListFragment.newInstance(R.string.app_name);
 
@@ -688,7 +689,7 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
         } else {
             return MainFragment()
         }
-        //                return BaseDBFragment.newInstance(
+//                return BaseDBFragment.newInstance(
 //                        //Constants.D_ALL,
 //                        getString(R.string.dictionary_all));
     }
@@ -737,8 +738,8 @@ class MainActivity : FeatureActivity(), NavigationView.OnNavigationItemSelectedL
         binding!!.konfettiView.start(
             PartyFactory(emitterConfig)
                 .spread(360)
-                .shapes(Arrays.asList<Shape?>(Square, Circle, drawableShape))
-                .colors(mutableListOf<Int>(0xfce18a, 0xff726d, 0xf4306d, 0xb48def))
+                .shapes(listOf<Shape>(Square, Circle, drawableShape))
+                .colors(mutableListOf(0xfce18a, 0xff726d, 0xf4306d, 0xb48def))
                 .setSpeedBetween(0f, 30f)
                 .position(Relative(0.5, 0.3))
                 .build()

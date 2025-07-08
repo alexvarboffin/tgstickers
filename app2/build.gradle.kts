@@ -23,7 +23,22 @@ android {
         val code = versionCodeDate()
 
         defaultConfig {
-            resConfigs("en", "es", "fr", "de", "it", "pt", "el", "ru", "ja", "zh-rCN", "zh-rTW", "ko", "ar", "uk")
+            resConfigs(
+                "en",
+                "es",
+                "fr",
+                "de",
+                "it",
+                "pt",
+                "el",
+                "ru",
+                "ja",
+                "zh-rCN",
+                "zh-rTW",
+                "ko",
+                "ar",
+                "uk"
+            )
             multiDexEnabled = true
             vectorDrawables {
                 useSupportLibrary = true
@@ -53,15 +68,15 @@ android {
         getByName("release") {
             isMinifyEnabled = true
             isShrinkResources = true
-            proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
-            )
+            proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
             signingConfig = signingConfigs.getByName("x")
             versionNameSuffix = ".release"
         }
         getByName("debug") {
-            multiDexEnabled = true
+            //multiDexEnabled = true
+            isMinifyEnabled = true
+            isShrinkResources = true
+
             signingConfig = signingConfigs.getByName("x")
             versionNameSuffix = ".DEMO"
         }
@@ -94,7 +109,7 @@ apply(from = "C:\\scripts/copyReports.gradle")
 
 dependencies {
     implementation(fileTree(mapOf("dir" to "libs", "include" to listOf("*.jar"))))
-    
+
     // AndroidX Core
     implementation(libs.androidx.appcompat)
     implementation(libs.material)

@@ -18,7 +18,7 @@ import com.google.firebase.analytics.FirebaseAnalytics
 import com.walhalla.domain.repository.from_internet.AdvertAdmobRepository
 import com.walhalla.domain.repository.from_internet.AdvertConfig
 import com.walhalla.library.BuildConfig
-import com.walhalla.ui.DLog.d
+
 import com.walhalla.utils.AdmobAdsIds
 import com.walhalla.utils.RewardManager
 import com.walhalla.wads.AppOpenAdManager
@@ -36,7 +36,7 @@ class TApp : Application() {
     }
 
     fun incIntersticialCounter() {
-        d("Counter " + this.intersticialCounter)
+        println("Counter " + this.intersticialCounter)
         this.intersticialCounter++
     }
 
@@ -79,10 +79,10 @@ class TApp : Application() {
                 if (BuildConfig.DEBUG) {
                     Toast.makeText(
                         activity,
-                        "###" + activity.getLocalClassName(),
+                        "###" + activity.localClassName,
                         Toast.LENGTH_SHORT
                     ).show()
-                    d("###" + activity.getLocalClassName())
+                    println("###" + activity.localClassName)
                 }
 
                 // An ad activity is started when an ad is showing, which could be AdActivity class from Google
@@ -99,7 +99,7 @@ class TApp : Application() {
                     if (BuildConfig.DEBUG) {
                         //java.lang.Exception: Toast callstack! strTip=
                         // @@@Toast.makeText(myApplication, "@@@" + activity.getLocalClassName(), Toast.LENGTH_SHORT).show();
-                        d("@@@" + activity.getLocalClassName())
+                        println("@@@" + activity.localClassName)
                     }
                 }
             }
@@ -118,30 +118,26 @@ class TApp : Application() {
         })
 
 
-        val list: MutableList<String?> = ArrayList<String?>()
+        val list: MutableList<String?> = ArrayList()
+        list.add(AdRequest.DEVICE_ID_EMULATOR)
+        list.add("A8A2F7804653E219880030864C1F32E4")
+        list.add("5D5A89BC6372A49242D138B9AC352894")
+        list.add("A2A86E2966898F258CB671EE038C2703")
+        list.add("E20E841EDD87D721EE54510499AE2605")
+        list.add("47968D9B88E1887C32E066D476736990")
 
-        run {
-            list.add(AdRequest.DEVICE_ID_EMULATOR)
-            list.add("A8A2F7804653E219880030864C1F32E4")
-            list.add("5D5A89BC6372A49242D138B9AC352894")
-            list.add("A2A86E2966898F258CB671EE038C2703")
-            list.add("E20E841EDD87D721EE54510499AE2605")
-            list.add("47968D9B88E1887C32E066D476736990")
-        }
         val requestConfiguration = RequestConfiguration.Builder()
             .setTestDeviceIds(list)
             .build()
         MobileAds.setRequestConfiguration(requestConfiguration)
-        MobileAds.initialize(
-            this,
-            OnInitializationCompleteListener { initializationStatus: InitializationStatus? -> })
+        MobileAds.initialize(this) { initializationStatus: InitializationStatus? -> }
 
-        val config: AdvertConfig? = AdvertConfig.newBuilder()
+        val config: AdvertConfig = AdvertConfig.newBuilder()
             .setAppId(getString(R.string.app_id))
             .setBannerId(getString(R.string.b1))
             .build()
 
-        repository = AdvertAdmobRepository.getInstance(config!!)
+        repository = AdvertAdmobRepository.getInstance(config)
 
 
         //Thread.setDefaultUncaughtExceptionHandler(CustomExceptionHandler.getInstance(getApplicationContext()));
@@ -166,7 +162,7 @@ class TApp : Application() {
                     if (!appOpenAdManager!!.isShowingAd) {
                         appOpenAdManager!!.showAdIfAvailable(currentActivity)
                     }
-                    d("{}{}{}{}" + currentActivity)
+                    println("{}{}{}{}$currentActivity")
                 }
             }
         })
